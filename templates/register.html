@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <link
+  rel="stylesheet"
+  href="/static/register.css"
+  />
+  <style>
+    a:link {
+      color: green;
+      background-color: transparent;
+      text-decoration: none;
+    }
+    
+    a:visited {
+      color: pink;
+      background-color: transparent;
+      text-decoration: none;
+    }
+    
+    a:hover {
+      color: red;
+      background-color: transparent;
+      text-decoration: underline;
+    }
+    
+    a:active {
+      color: yellow;
+      background-color: transparent;
+      text-decoration: underline;
+    }
+    </style>
+  <title>Creare cont nou</title>
+  <div id="container_1">
+
+    <img src="/static/Logo.png" width="150" height="150">
+    <h1 id="title">
+    Creare cont utilizator
+  </h1>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'error'%}
+      <div class="alert alert-danger alter-dismissable fade show" role="alert">
+        {{ message }}
+       <button type="button" class="close" data-dismiss="alert">
+          <span aria-hidden="true">&times;</span>
+       </button>
+      </div>
+    {% else %}
+      <div class="alert alert-success alter-dismissable fade show" role="alert">
+        {{ message }}
+       <button type="button" class="close" data-dismiss="alert">
+          <span aria-hidden="true">&times;</span>
+       </button>
+      </div>
+    {% endif %}
+    {% endfor %}
+  {% endif %}
+  {% endwith %}
+  <p id="description">
+    Introduceți datele cerute mai jos.
+  </p>
+  <a href="{{url_for('login')}}">Utilizator existent? Accesați-vă contul aici</a><br>
+  </div>
+  <div id="container_2">
+    <form id="survey-form" method="post">
+      <label id="name-label">Nume utilizator</label>
+        <input type="text" id="username" name="username" class="form" placeholder="Introduceți numele de utilizator"><br>
+      <label id="password-label">Parola</label>
+        <input type="password" id="password" name="password" class="form"  placeholder="Introduceți parola"><br>
+      <label id="password-label">Confirmă parola</label>
+        <input type="password" id="password1" name="password1" class="form"  placeholder="Repetați parola"><br>
+      <label id="user-type">Ce tip de utilizator vi se potrivește cel mai bine?</label><br>
+      <select id="dropdown" name="user-type" >
+        <option disabled selected value>
+          Selectează-ți rolul
+        </option>
+        <option value="elev">
+          Elev
+        </option>
+        <option value="student">
+          Student
+        </option>
+        <option value="profesor">
+          Profesor
+        </option>
+        <option value="consilier cariera">
+          Consilier Cariera
+        </option>
+      </select> <br> <br>
+      <input type="submit" id="submit" name="submit" value="Submit">
+    </form>
+  </div>
+</html>

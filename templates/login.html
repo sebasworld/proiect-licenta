@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <link
+  rel="stylesheet"
+  href="/static/register.css"
+  />
+  <style>
+    a:link {
+      color: green;
+      background-color: transparent;
+      text-decoration: none;
+    }
+    
+    a:visited {
+      color: pink;
+      background-color: transparent;
+      text-decoration: none;
+    }
+    
+    a:hover {
+      color: red;
+      background-color: transparent;
+      text-decoration: underline;
+    }
+    
+    a:active {
+      color: yellow;
+      background-color: transparent;
+      text-decoration: underline;
+    }
+    </style>
+  <title>Creare cont nou</title>
+  <div id="container_1">
+
+    <img src="/static/Logo.png" width="150" height="150">
+    <h1 id="title">
+    Login
+  </h1>
+  <p id="description">
+    Introduceți-vă datele dacă aveți deja un cont de utilizator.
+  </p>
+  <a href="{{url_for('register')}}">Utilizator nou? Înregistrați-vă aici</a><br>
+  </div>
+  <div id="container_2">
+    
+    <form id="survey-form" method="post">
+      <label id="name-label">Nume utilizator</label><br>
+        <input type="text" id="username" name="username" class="form" required placeholder="Introduceți numele de utilizator"><br>
+      <label id="password-label">Parola</label><br>
+        <input type="password" id="password" name="password" class="form" required placeholder="Introduceți parola"><br>
+    <input type="submit" id="submit" name="submit" value="Login"><br> <br>
+    </form>
+  </div>
+</html>

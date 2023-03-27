@@ -1,0 +1,43 @@
+
+activate environment:	py -3 -m venv .venv	
+			.venv\scripts\activate
+			** daca nu merge din cauza privacy: Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+
+update pip:  python -m pip install --upgrade pip
+
+install flask:  python -m pip install flask
+
+activate in another terminal: .venv\Scripts\Activate.ps1
+
+run flask in terminal dev server: python -m flask run
+
+how to set env variable for flask app: $env:FLASK_APP = "test.py"
+
+debug mode: $env:FLASK_DEBUG = 1  
+
+
+
+
+
+
+
+
+how to run postgresql in docker:
+1. install docker desktop
+2. make docker hub account
+3. run in terminal/cmd: docker login
+4. run : docker run --name postgres-image -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres
+5. verify with: docker ps
+date psql - user:postgres, db:postgres, pw:postgres, nume con in vs code: PSQL Conn Docker
+
+how to add psql in vs code:
+1. install Postgresql Management tool extension
+2. ctrl shift p - new query
+3. add connection de jos stanga si introdus datele pt postgres din docker si ma conectez la db
+4. testare cu : select version()
+
+
+how to modify psql via bash docker:
+1. docker exec -it 0d7689671311 bash
+2. psql -U docker
+3. de aici fac ce vreau cu postgres
