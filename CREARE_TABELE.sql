@@ -9,6 +9,30 @@ create table Actori(
 
 select * from Actori
 
+create table Users(
+	userid int NOT NULL,
+	tipuserid int NOT NULL,
+	username varchar(50) NOT NULL,
+	passwd varchar(50) NOT NULL,
+	primary key(userID),
+    unique(userid, username, passwd),	
+	CONSTRAINT fk_scenariu
+	   FOREIGN KEY(tipuserid)
+	     REFERENCES TipUsers(tipuserid)
+);
+
+select * from Users
+
+create table TipUsers(
+	tipuserid int NOT NULL,
+	tip varchar(50) NOT NULL,
+	UNIQUE(tipuserid, tip), 
+	primary key(tipuserid)
+);
+
+SELECT * from TipUsers
+
+
 create table Genuri(
 	genID int,
 	numeGen varchar(500),

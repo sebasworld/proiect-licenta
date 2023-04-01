@@ -4,6 +4,18 @@
   rel="stylesheet"
   href="/static/register.css"
   />
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css"
+  integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp"
+  crossorigin="anonymous"
+  />
+  <script 
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" 
+  crossorigin="anonymous">
+  </script>
+
   <style>
     a:link {
       color: green;
@@ -41,14 +53,31 @@
   </p>
   <a href="{{url_for('register')}}">Utilizator nou? Înregistrați-vă aici</a><br>
   </div>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'error' %}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% else %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endif %}
+    {% endfor %}
+  {% endif %}
+  {% endwith %}
   <div id="container_2">
     
     <form id="survey-form" method="post">
       <label id="name-label">Nume utilizator</label><br>
-        <input type="text" id="username" name="username" class="form" required placeholder="Introduceți numele de utilizator"><br>
+        <input type="text" id="username" name="username" class="form"  placeholder="Introduceți numele de utilizator"><br>
       <label id="password-label">Parola</label><br>
-        <input type="password" id="password" name="password" class="form" required placeholder="Introduceți parola"><br>
-    <input type="submit" id="submit" name="submit" value="Login"><br> <br>
+        <input type="password" id="password" name="password" class="form"  placeholder="Introduceți parola"><br><br>
+    <input type="submit" id="submit" name="submit" value="Login">
     </form>
   </div>
 </html>
