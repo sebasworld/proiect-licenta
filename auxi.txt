@@ -32,3 +32,39 @@
     {% endfor %}
   {% endif %}
   {% endwith %}
+
+
+
+  from flask import request, render_template
+import psycopg2
+
+@app.route('/filter', methods=['GET', 'POST'])
+def filter_data():
+    conn = psycopg2.connect(database="mydatabase", user="myusername", password="mypassword", host="localhost", port="5432")
+    cur = conn.cursor()
+
+    if request.method == 'POST':
+        category = request.form.get('category')
+        price_min = request.form.get('price_min')
+        price_max = request.form.get('price_max')
+
+        # Start with a basic query that selects all products
+        query = "SELECT * FROM products WHERE 1 = 1"
+
+        # Dynamically add filters based on user input
+        if category:
+            query += " AND category = %s"
+        if price_min:
+            query += " AND price >= %s"
+        if price_max:
+            query += " AND price <= %s"
+
+        # Execute the query with the appropriate parameters
+        cur.execute(query, (category, price_min, price_max))
+
+        data = cur.fetchall()
+        conn.close()
+        return render_template('filtered_data.html', data=data)
+
+    else:
+        return render_template('filter_form.html')

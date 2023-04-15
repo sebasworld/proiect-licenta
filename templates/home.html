@@ -1,29 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
+  <link
+  rel="stylesheet"
+  href="/static/home.css"
+  />
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css"
+  integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp"
+  crossorigin="anonymous"
+  />
+  <script 
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" 
+  crossorigin="anonymous">
+  </script>
+  <style>
+    a:link {
+      color: green;
+      background-color: transparent;
+      text-decoration: none;
+    }
+    
+    a:visited {
+      color: pink;
+      background-color: transparent;
+      text-decoration: none;
+    }
+    
+    a:hover {
+      color: red;
+      background-color: transparent;
+      text-decoration: underline;
+    }
+    
+    a:active {
+      color: yellow;
+      background-color: transparent;
+      text-decoration: underline;
+    }
+    </style>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-      crossorigin="anonymous"
-    />
     <title>Home</title>
 </head>
+
 <body>
-    <h1> Home page </h1>
-    <a href="{{url_for('login')}}">Go to Login</a><br>
-    <a href="{{url_for('register')}}">Go to Register</a><br>
-    {% for item in data %}
-    <p>{{item[0]}}</p>
-    {% endfor %}
-    
+    <div class="topnav">
+      <a class="active" onclick="location.reload();">Home</a>
+      <a href="{{url_for('univs')}}">Universities</a>
+      <a href="{{url_for('favs')}}">Favorites</a>
+      <a href="{{url_for('register')}}">Register</a>
+      <a href="{{url_for('login')}}">Logout</a>
+    </div>
 </body>
+<br>
+<head>
+  <style>
+    /* Center image horizontally */
+    .center {
+      text-align: center;
+    }
+
+    /* Center image vertically */
+    .center img {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <div class="center">
+    <img src="/static/Logo.png">
+  </div>
+</body>
+<head>
+  <style>
+    /* Center text horizontally and vertically in a div with id="centered" */
+    #centered {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 20vh;
+    }
+    
+    /* Make text big and bold only inside the div with id="centered" */
+    #centered h1 {
+      font-size: 5em;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<head>
+  <style>
+    /* Center text horizontally and vertically in a div with id="centered" */
+    #centered1 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 10vh;
+    }
+    
+    /* Make text big and bold only inside the div with id="centered" */
+    #centered1 p {
+      font-size: 2em;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="centered">
+    <h1>Bine ați venit pe WhatUniversity!</h1>
+  </div>
+</body>
+<body>
+  <div id="centered1">
+    <p>Platforma care vă ajută să vă decideți asupra viitorului dumneavoastră academic!</p>
+  </div>
+</body>
+
+<head>
+  <style>
+    /* Style the buttons */
+    .button {
+      display: inline-block;
+      padding: 20px 60px;
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      background-color: blue;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      text-decoration: none;
+      margin: 100px;
+      cursor: pointer;
+    }
+
+    /* Style the container */
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 30vh;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="{{ url_for('register') }}" class="button">Creați-vă un cont nou!</a>
+    <a href="{{ url_for('login') }}" class="button">Logați-vă la un cont existent!</a>
+  </div>
+</body>
+
 </html>
+

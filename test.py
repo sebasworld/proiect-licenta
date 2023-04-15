@@ -14,6 +14,14 @@ def home():
     creds = crsr.fetchall()
     return render_template('home.html', data=creds) 
 
+@app.route('/univs', methods=['post', 'get'])
+def univs():
+    return render_template('univs.html') 
+
+@app.route('/favs', methods=['post', 'get'])
+def favs():
+    return render_template('favs.html') 
+
 @app.route('/login', methods=['post', 'get'])
 def login():
     if request.method=='POST':

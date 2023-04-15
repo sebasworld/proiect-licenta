@@ -1,5 +1,9 @@
 body{
-    background-image: url("https://st3.depositphotos.com/1103339/13209/v/1600/depositphotos_132095056-stock-illustration-abstract-seamless-pattern-in-postmodern.jpg");
+    background-image: url("/static/blue-image.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
   }
   div{
     margin: 2em 5em 3em 5em;
