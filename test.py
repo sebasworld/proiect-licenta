@@ -1,11 +1,11 @@
-from flask import Flask, render_template, url_for, request, flash
+from flask import Flask, render_template, url_for, request, flash, session, redirect, make_response
 from flask_login import UserMixin
 import psycopg2
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisisasecretkey'
 
-
+@app.route('/', methods=['post', 'get'])
 @app.route('/home', methods=['post', 'get'])
 def home():
     conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
@@ -21,6 +21,45 @@ def univs():
 @app.route('/favs', methods=['post', 'get'])
 def favs():
     return render_template('favs.html') 
+
+@app.route('/form_elev', methods=['post', 'get'])
+def form_elev():
+    if request.method == 'POST':
+        conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
+        crsr = conn.cursor()
+        profil = request.form.get('profil')
+        domeniu = request.form.getlist('domeniu')
+        admitere = request.form.get('admitere')
+        orase = request.form.get('orase')
+        print(profil)
+        print(domeniu)
+        print(admitere)
+        print(orase)
+            # Start with a basic query that selects all products
+        #query = "SELECT * FROM Facs WHERE 1 = 1"
+
+        # Dynamically add filters based on user input
+       #if profil:
+         #   query += " AND profilelev = :profil"
+        #if domeniu:
+         #   query += " AND domeniu = :domeniu"
+        #if admitere:
+         #   query += " AND tipAdmitere = :admitere"
+        #if orase:
+         #   query += " AND locatie = :orase"
+
+        # Execute the query with the appropriateparameters
+        crsr.execute("SELECT * FROM Facs WHERE 1 = 1 and profilelev=%(profil)s and (domeniu~%(domeniu1)s or domeniu~%(domeniu2)s) and tipAdmitere=%(admitere)s and locatie=%(orase)s", {'profil': profil, 'domeniu1': domeniu[0],'domeniu2': domeniu[1], 'admitere': admitere, 'orase':orase})
+        date_fac = crsr.fetchall()
+        print(date_fac)
+        conn.close()
+
+
+        # Set the session variable to indicate that the form has been filled out
+        return redirect(url_for('home'))
+
+    # If this is a GET request, render the form page
+    return render_template('form_elev.html')
 
 @app.route('/login', methods=['post', 'get'])
 def login():
@@ -42,9 +81,20 @@ def login():
             flash('Credențialele introduse nu corecte!', category='error')     
         else:
             #flash('V-ați logat cu succes!', category='success')
-            return render_template('home.html')
+            crsr2 = conn.cursor()
+            crsr2.execute("select tip from Users where username=%(username)s and passwd=%(passwd)s", {'username': username, 'passwd': password})
+            data = crsr2.fetchall()
+            if data:
+                tip = str(data[0][0])
+                print(tip)
+                if tip == 'elev':
+                    if username not in session:
+                        session[username] = True
+                        return redirect(url_for('form_elev'))
+                    return redirect(url_for('home'))      
+            crsr2.close()    
         crsr.close()
-        conn.close()   
+        conn.close()         
     return render_template('login.html')
 
 @app.route('/register', methods=['POST', 'GET'])
