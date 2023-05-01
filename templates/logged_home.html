@@ -2,7 +2,7 @@
 <html lang="en">
   <link
   rel="stylesheet"
-  href="/static/univs.css"
+  href="/static/logged_home.css"
   />
   <link
   rel="stylesheet"
@@ -46,10 +46,12 @@
 
 <body>
     <div class="topnav">
-      <a href="{{url_for('logged_home')}}">Acasă</a>
-      <a class="active" href="{{url_for('univs')}}">Universități</a>
+      <a class="active" href="{{url_for('logged_home')}}">Acasă</a>
+      <a href="{{url_for('univs')}}">Universități</a>
       <a href="{{url_for('favs')}}">Favorite</a>
       <a class="right" href="{{url_for('logout')}}">Delogare ({{ username }})</a>
     </div>
 </body>
+
+
 </html>

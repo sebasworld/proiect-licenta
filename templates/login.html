@@ -48,7 +48,7 @@
     <h1 id="title">
     Login
   </h1>
-  <p id="description">
+  <p id="description" class="my-div">
     Introduceți-vă datele dacă aveți deja un cont de utilizator.
   </p>
   <a href="{{url_for('register')}}">Utilizator nou? Înregistrați-vă aici</a><br>
@@ -57,12 +57,12 @@
   {% if messages %}
     {% for category, message in messages %}
     {% if category == 'error' %}
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <div class="alert alert-danger alert-dismissible fade show message-div" role="alert">
         {{ message }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
     {% else %}
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <div class="alert alert-success alert-dismissible fade show message-div" role="alert">
         {{ message }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
@@ -71,7 +71,6 @@
   {% endif %}
   {% endwith %}
   <div id="container_2">
-    
     <form id="survey-form" method="post">
       <label id="name-label">Nume utilizator</label><br>
         <input type="text" id="username" name="username" class="form"  placeholder="Introduceți numele de utilizator"><br>

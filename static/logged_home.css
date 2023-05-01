@@ -56,12 +56,11 @@ body {
     color: white;
   }
 
-  /* Float the Delogare link to the right */
-  .topnav a.right {
+   /* Float the Delogare link to the right */
+   .topnav a.right {
     float: right;
   }
 
-    /* Float the Delogare link to the right */
-    .topnav p.right {
-      float: right;
-    }
+  .topnav p.right {
+    float: right;
+  }

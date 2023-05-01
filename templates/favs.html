@@ -46,11 +46,51 @@
 
 <body>
     <div class="topnav">
-      <a href="{{url_for('home')}}">Acasă</a>
+      <a href="{{url_for('logged_home')}}">Acasă</a>
       <a href="{{url_for('univs')}}">Universități</a>
       <a class="active" href="{{url_for('favs')}}">Favorite</a>
-      <a href="{{url_for('register')}}">Creare Cont</a>
-      <a href="{{url_for('login')}}">Delogați-vă</a>
+      {% if username %}
+          <a class="right" href="{{url_for('logout')}}">Delogare ({{ username }})</a>
+      {% elif username1 %}
+          <a class="right" href="{{url_for('logout')}}">Delogare ({{ username1 }})</a>
+      {% endif %}
     </div>
 </body>
+{% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% if category == 'error'%}
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        {{ message }}
+                        
+                    </div>
+                {% else %}
+                    <div class="alert alert-success alert-dismissible fade show">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %} 
+
+    <div style="position:relative;margin:20px">
+        
+      {% for i in range(len_list) %}
+      
+              <div class="column" style = "font-size: 20px;">
+                <p><b>Facultate : </b></p>
+                  <p>{{ ready_list_facs[i][0] }}</p>
+              </div>
+              
+              <div class="column" style="font-size: 20px;">
+                  <p><b>Universitate : </b></p>
+                  <p>{{ ready_list_facs[i][1] }}</p>
+              </div>
+      {% endfor %}
+
+
+  </div>
+
 </html>

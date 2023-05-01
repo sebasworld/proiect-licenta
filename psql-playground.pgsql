@@ -58,10 +58,10 @@ create table Facs(
 	facName varchar(100) NOT NULL,
 	univName varchar(100) NOT NULL,
 	locatie varchar(100) NOT NULL,
-	rating numeric(2,1) NOT NULL,
-	durataLicenta int NOT NULL,
+	rating varchar(100) NOT NULL,
+	durataLicenta varchar(100) NOT NULL,
 	taxa varchar(100) NOT NULL,
-	ultimaMedie numeric(3,2) NOT NULL,
+	ultimaMedie varchar(100) NOT NULL,
 	tipAdmitere varchar(100) NOT NULL,
 	profilelev varchar(100) NOT NULL,
 	domeniu varchar(100) NOT NULL,
@@ -75,28 +75,30 @@ drop table Facs;
 insert into Facs(facid,facName,univName,locatie,
 			rating,durataLicenta,taxa,ultimaMedie,tipAdmitere,profilelev,domeniu,programestudiu)
 VALUES(1, 'Facultatea de Automatică și Calculatoare - Ingineria Sistemelor', 'Universitatea Politehnica din București','București',
-		 4.4, 4, 'taxa', 8.28, 'Examen de admitere', 'Matematică-Informatică', 'Inginerie, Știință & Tehnologie', 'licenta,master,doctorat');
+		 '4.4','4', 'taxa', '8.28', 'Examen de admitere', 'Matematică-Informatică', 'Inginerie, Știință & Tehnologie', 'licenta,master,doctorat');
 
 insert into Facs(facid,facName,univName,locatie,
 			rating,durataLicenta,taxa,ultimaMedie,tipAdmitere,profilelev,domeniu,programestudiu)
 VALUES(3, 'Facultatea de Automatică și Calculatoare - Ingineria Sistemelor', 'Universitatea Politehnica din București','București',
-		 4.4, 4, 'buget', 8.37, 'Examen de admitere', 'Matematică-Informatică', 'Inginerie, Știință & Tehnologie', 'licenta,master,doctorat' );
+		 '4.4', '4', 'buget', '8.37', 'Examen de admitere', 'Matematică-Informatică', 'Inginerie, Știință & Tehnologie', 'licenta,master,doctorat' );
 
 insert into Facs(facid,facName,univName,locatie,
 			rating,durataLicenta,taxa,ultimaMedie,tipAdmitere,profilelev,domeniu,programestudiu)
 VALUES(4, 'Facultatea de Automatică și Calculatoare - Calculatoare și Tehnologia Informației', 'Universitatea Politehnica din București','București',
-		 4.4, 4, 'taxa', 8.46, 'Examen de admitere', 'Matematică-Informatică', 'Inginerie, Știință & Tehnologie','licenta,master,doctorat' );
+		 '4.4', '4', 'taxa', '8.46', 'Examen de admitere', 'Matematică-Informatică', 'Inginerie, Știință & Tehnologie','licenta,master,doctorat' );
 
 insert into Facs(facid,facName,univName,locatie,
 			rating,durataLicenta,taxa,ultimaMedie,tipAdmitere,profilelev,domeniu,programestudiu)
 VALUES(5, 'Facultatea de Automatică și Calculatoare - Calculatoare și Tehnologia Informației', 'Universitatea Politehnica din București','București',
-		 4.4, 4, 'buget', 9.14, 'Examen de admitere', 'Matematică-Informatică', 'Inginerie, Știință & Tehnologie', 'licenta,master,doctorat' );
+		 '4.4', '4', 'buget', '9.14', 'Examen de admitere', 'Matematică-Informatică', 'Inginerie, Știință & Tehnologie', 'licenta,master,doctorat' );
 
 
 select * from Facs;
 SELECT * FROM Facs WHERE 1 = 1 and domeniu ~ 'Inginerie'
 select tip from Users where username='Salut' and passwd='salut123'
 select * from Users
+
+SELECT distinct facName,univName FROM Facs where profilelev='Matematică-Informatică'
 
 delete all from Facs where facid=1;
 create table DomeniiPoliBuc(

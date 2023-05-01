@@ -55,3 +55,14 @@ body {
     background-color: #04AA6D;
     color: white;
   }
+
+   /* Float the Delogare link to the right */
+   .topnav a.right {
+    float: right;
+  }
+
+  
+   /* Float the Delogare link to the right */
+   .topnav p.right {
+    float: right;
+  }

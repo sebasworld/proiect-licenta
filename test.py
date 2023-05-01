@@ -1,65 +1,142 @@
-from flask import Flask, render_template, url_for, request, flash, session, redirect, make_response
-from flask_login import UserMixin
+from flask import Flask, render_template, url_for, request, flash, session, redirect
+from datetime import timedelta
 import psycopg2
+import json
+
 
 app = Flask(__name__)
+app.secret_key = 'secretkey'
+app.permanent_session_lifetime = timedelta(minutes=30)
 app.config['SECRET_KEY'] = 'thisisasecretkey'
 
 @app.route('/', methods=['post', 'get'])
-@app.route('/home', methods=['post', 'get'])
+@app.route('/welcome', methods=['post', 'get'])
 def home():
-    conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
-    crsr = conn.cursor()
-    crsr.execute('SELECT username from Users')
-    creds = crsr.fetchall()
-    return render_template('home.html', data=creds) 
+    return render_template('home.html')
+
+
+@app.route('/home', methods=['post', 'get'])
+def logged_home():
+    username = session['user']
+    return render_template('logged_home.html',username=username) 
+
 
 @app.route('/univs', methods=['post', 'get'])
 def univs():
-    return render_template('univs.html') 
+    username = session['user']
+    return render_template('univs.html', username=username) 
 
 @app.route('/favs', methods=['post', 'get'])
 def favs():
-    return render_template('favs.html') 
+    ready_list_facs = session['lista_facs']
+    len_list = len(ready_list_facs)
+    return render_template('favs.html', len_list=len_list, ready_list_facs=ready_list_facs, username=request.args.get('username'), username1 = session['user'] ) 
+
+@app.route('/logout', methods=['post', 'get'])
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('login')) 
 
 @app.route('/form_elev', methods=['post', 'get'])
 def form_elev():
     if request.method == 'POST':
-        conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
-        crsr = conn.cursor()
+
+        session.permanent = True
         profil = request.form.get('profil')
         domeniu = request.form.getlist('domeniu')
-        admitere = request.form.get('admitere')
-        orase = request.form.get('orase')
+        admitere = request.form.getlist('admitere')
+        orase = request.form.getlist('orase')
+        taxa = request.form.getlist('taxa')
         print(profil)
         print(domeniu)
         print(admitere)
         print(orase)
-            # Start with a basic query that selects all products
-        #query = "SELECT * FROM Facs WHERE 1 = 1"
+        print(taxa)
 
-        # Dynamically add filters based on user input
-       #if profil:
-         #   query += " AND profilelev = :profil"
-        #if domeniu:
-         #   query += " AND domeniu = :domeniu"
-        #if admitere:
-         #   query += " AND tipAdmitere = :admitere"
-        #if orase:
-         #   query += " AND locatie = :orase"
+        conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
+        crsr = conn.cursor()
+        crsr1 = conn.cursor()
+        crsr2 = conn.cursor()
 
-        # Execute the query with the appropriateparameters
-        crsr.execute("SELECT * FROM Facs WHERE 1 = 1 and profilelev=%(profil)s and (domeniu~%(domeniu1)s or domeniu~%(domeniu2)s) and tipAdmitere=%(admitere)s and locatie=%(orase)s", {'profil': profil, 'domeniu1': domeniu[0],'domeniu2': domeniu[1], 'admitere': admitere, 'orase':orase})
-        date_fac = crsr.fetchall()
+        listdom = ['None'] * 6
+        if len(domeniu) == 6:
+            listdom = domeniu
+        elif len(domeniu) == 5:
+            listdom[:5] = domeniu
+        elif len(domeniu) == 4:
+            listdom[:4] = domeniu
+        elif len(domeniu) == 3:
+            listdom[:3] = domeniu
+        elif len(domeniu) == 2:
+            listdom[:2] = domeniu
+        elif len(domeniu) == 1:
+            listdom[:1] = domeniu
+        else:
+            print('n-a fost selectat nimic la domeniu')
+        print(listdom)
+
+
+        
+        listadm = ['None'] * 2
+        if len(admitere) == 2:
+            listadm = admitere
+        elif len(admitere) == 1:
+            listadm[:1] = admitere
+        else:
+            print('n-a fost selectat nimic la admitere')
+        print(listadm)
+
+
+        listorase = ['None'] * 6
+        if len(orase) == 6:
+            listorase = orase
+        elif len(orase) == 5:
+            listorase[:5] = orase
+        elif len(orase) == 4:
+            listorase[:4] = orase
+        elif len(orase) == 3:
+            listorase[:3] = orase
+        elif len(orase) == 2:
+            listorase[:2] = orase
+        elif len(orase) == 1:
+            listorase[:1] = orase
+        else:
+            print('n-a fost selectat nimic la orase')
+        print(listorase)
+
+
+        listtaxa = ['None'] * 2
+        if len(taxa) == 2:
+            listtaxa = taxa
+        elif len(taxa) == 1:
+            listtaxa[:1] = taxa
+        else:
+            print('n-a fost selectat nimic la taxa')
+        print(listtaxa)
+
+        if listtaxa[1] == 'None':
+            crsr.execute("SELECT distinct facName,univName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu FROM Facs where profilelev=%(profil)s and taxa=%(taxa)s and (domeniu~%(domeniu1)s or domeniu~%(domeniu2)s or domeniu~%(domeniu3)s or domeniu~%(domeniu4)s or domeniu~%(domeniu5)s or domeniu~%(domeniu6)s) and (locatie=%(oras1)s or locatie=%(oras2)s or locatie=%(oras3)s or locatie=%(oras4)s or locatie=%(oras5)s or locatie=%(oras6)s) and (tipAdmitere=%(admitere1)s or tipAdmitere=%(admitere2)s)", {'profil': profil, 'domeniu1': listdom[0],'domeniu2': listdom[1], 'domeniu3': listdom[2],'domeniu4': listdom[3], 'domeniu5': listdom[4],'domeniu6': listdom[5], 'admitere1': listadm[0], 'admitere2': listadm[1], 'oras1':listorase[0], 'oras2':listorase[1], 'oras3':listorase[2], 'oras4':listorase[3], 'oras5':listorase[4], 'oras6':listorase[5], 'taxa':listtaxa[0]})
+            date_fac = crsr.fetchall()
+        else:
+            crsr2.execute("SELECT distinct facName,univName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu FROM Facs where profilelev=%(profil)s and (domeniu~%(domeniu1)s or domeniu~%(domeniu2)s or domeniu~%(domeniu3)s or domeniu~%(domeniu4)s or domeniu~%(domeniu5)s or domeniu~%(domeniu6)s) and (locatie=%(oras1)s or locatie=%(oras2)s or locatie=%(oras3)s or locatie=%(oras4)s or locatie=%(oras5)s or locatie=%(oras6)s) and (tipAdmitere=%(admitere1)s or tipAdmitere=%(admitere2)s)", {'profil': profil, 'domeniu1': listdom[0],'domeniu2': listdom[1], 'domeniu3': listdom[2],'domeniu4': listdom[3], 'domeniu5': listdom[4],'domeniu6': listdom[5], 'admitere1': listadm[0], 'admitere2': listadm[1], 'oras1':listorase[0], 'oras2':listorase[1], 'oras3':listorase[2], 'oras4':listorase[3], 'oras5':listorase[4], 'oras6':listorase[5]})
+            date_fac = crsr2.fetchall()
+        
         print(date_fac)
+
+        if not date_fac:
+            flash('Nu s-au găsit rezultate!', category='error')
+            return render_template('favs.html')
+        else:
+            date_json = json.dumps(date_fac)
+            list_facs= json.loads(date_json)
+            ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5],x[6],x[7],x[8]) for x in list_facs]
+            session['lista_facs'] = ready_list_facs
+        
+        len_list = len(ready_list_facs)
+        
         conn.close()
-
-
-        # Set the session variable to indicate that the form has been filled out
-        return redirect(url_for('home'))
-
-    # If this is a GET request, render the form page
-    return render_template('form_elev.html')
+        return render_template('favs.html', len_list=len_list, ready_list_facs=ready_list_facs,username=request.args.get('username'))
+    return render_template('form_elev.html',username=request.args.get('username'))
 
 @app.route('/login', methods=['post', 'get'])
 def login():
@@ -88,10 +165,12 @@ def login():
                 tip = str(data[0][0])
                 print(tip)
                 if tip == 'elev':
+                    if "user" not in session:
+                        session['user'] = username
                     if username not in session:
                         session[username] = True
-                        return redirect(url_for('form_elev'))
-                    return redirect(url_for('home'))      
+                        return redirect(url_for('form_elev', username=username))
+                    return redirect(url_for('favs', username=username))    
             crsr2.close()    
         crsr.close()
         conn.close()         

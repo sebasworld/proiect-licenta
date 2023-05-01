@@ -17,10 +17,10 @@
   </script>
 
   <div id="container_2">
-    <label id="description-label">Salut!</label><br>
-    <label id="description-label1">Te rugăm să răspunzi la întrebările de mai jos!</label><br><br>
+    <label id="description-label">Salutare, {{ username }}! Te-ai conectat cu succes!</label><br>
+    <label id="description-label1">Pentru prima conectare, te rugăm să răspunzi la întrebările de mai jos!</label><br><br>
     <form id="survey-form" method="POST">
-      <label id="profil-label">La ce profil din cadrul liceului vă încadrați?</label><br>
+      <label id="profil-label">La ce profil din cadrul liceului te încadrezi?</label><br>
       <select id="dropdown1" name="profil" >
         <option disabled selected value>
           Alege o opțiune
@@ -36,7 +36,7 @@
         </option>
       </select> <br> <br>
 
-      <label id="domeniu-label">Ce domenii de studiu superior v-ar atrage cel mai mult?</label><br>
+      <label id="domeniu-label">Ce domenii de studiu superior te-ar atrage cel mai mult?</label><br>
       <select id="dropdown2" name="domeniu" multiple >
         <option disabled selected value>
           Alege din opțiuni
@@ -61,7 +61,7 @@
         </option>
       </select> <br> <br>
 
-      <label id="admitere-label">Ce tip de admitere preferați?</label><br>
+      <label id="admitere-label">Ce tip de admitere preferi?</label><br>
       <select id="dropdown3" name="admitere" multiple>
         <option disabled selected value>
           Alege din opțiuni
@@ -74,7 +74,7 @@
         </option>
       </select> <br> <br>
 
-      <label id="locatie-label">Selectați orașele în care v-ați dori să fie facultatea?</label><br>
+      <label id="locatie-label">Selectează orașele în care ți-ai dori să studiezi.</label><br>
       <select id="dropdown4" name="orase"  multiple>
         <option disabled selected value>
           Alege din opțiuni
@@ -96,6 +96,19 @@
         </option>
         <option value="Craiova">
           Craiova
+        </option>
+      </select> <br> <br>
+
+      <label id="taxa-label">Filtrează facultățile după taxă sau buget.</label><br>
+      <select id="dropdown5" name="taxa"  multiple>
+        <option disabled selected value>
+          Alege din opțiuni
+        </option>
+        <option value="taxa">
+          Taxă
+        </option>
+        <option value="buget">
+          Buget
         </option>
       </select> <br> <br>
       <input type="submit" id="submit" name="submit" value="Submit">
