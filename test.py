@@ -6,7 +6,7 @@ import json
 
 app = Flask(__name__)
 app.secret_key = 'secretkey'
-app.permanent_session_lifetime = timedelta(minutes=30)
+app.permanent_session_lifetime = timedelta(days=1)
 app.config['SECRET_KEY'] = 'thisisasecretkey'
 
 @app.route('/', methods=['post', 'get'])
@@ -28,14 +28,129 @@ def univs():
 
 @app.route('/favs', methods=['post', 'get'])
 def favs():
-    ready_list_facs = session['lista_facs']
-    len_list = len(ready_list_facs)
-    return render_template('favs.html', len_list=len_list, ready_list_facs=ready_list_facs, username=request.args.get('username'), username1 = session['user'] ) 
+    if session['lista_facs'] and session['date_fac_elev'] and session['lista_facs_student']==False and session['date_fac_student']==False:
+        return render_template('favs.html', date_fac = session['date_fac_elev'], len_list=len(session['lista_facs']), ready_list_facs=session['lista_facs'], username=request.args.get('username'), username1 = session['user'] ) 
+    elif session['lista_facs_student'] and session['date_fac_student'] and session['date_fac_elev']==False and session['lista_facs']==False:
+        return render_template('favs.html', date_fac_student = session['date_fac_student'], len_list_student=len(session['lista_facs_student']), ready_list_facs_student=session['lista_facs_student'], username=request.args.get('username'), username1 = session['user'] ) 
+    return render_template('favs.html')
+
 
 @app.route('/logout', methods=['post', 'get'])
 def logout():
     session.pop('user', None)
     return redirect(url_for('login')) 
+
+@app.route('/form_student', methods=['post', 'get'])
+def form_student():
+    if request.method == 'POST':
+        session.permanent = True
+        domeniu = request.form.get('domeniu')
+        aspecte = request.form.getlist('aspecte')
+        dific = request.form.getlist('dific')
+        orase = request.form.getlist('orase')
+        formatul = request.form.getlist('format')
+        print(domeniu)
+        print(aspecte)
+        print(dific)
+        print(orase)
+        print(formatul)
+
+
+        conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
+        crsr = conn.cursor()
+
+        listaspecte = ['None'] * 10
+        if len(aspecte) == 10:
+            listaspecte = aspecte
+        elif len(aspecte) == 9:
+            listaspecte[:9] = aspecte
+        elif len(aspecte) == 8:
+            listaspecte[:8] = aspecte
+        elif len(aspecte) == 7:
+            listaspecte[:7] = aspecte
+        elif len(aspecte) == 6:
+            listaspecte[:6] = aspecte
+        elif len(aspecte) == 5:
+            listaspecte[:5] = aspecte
+        elif len(aspecte) == 4:
+            listaspecte[:4] = aspecte
+        elif len(aspecte) == 3:
+            listaspecte[:3] = aspecte
+        elif len(aspecte) == 2:
+            listaspecte[:2] = aspecte
+        elif len(aspecte) == 1:
+            listaspecte[:1] = aspecte
+        else:
+            print('n-a fost selectat nimic la aspecte')
+        print(listaspecte)
+
+
+        listdif = ['None'] * 4
+        if len(dific) == 4:
+            listdif = dific
+        elif len(dific) == 3:
+            listdif[:3] = dific
+        elif len(dific) == 2:
+            listdif[:2] = dific
+        elif len(dific) == 1:
+            listdif[:1] = dific
+        else:
+            print('n-a fost selectat nimic la dificultate')
+        print(listdif)
+
+
+        listorase = ['None'] * 6
+        if len(orase) == 6:
+            listorase = orase
+        elif len(orase) == 5:
+            listorase[:5] = orase
+        elif len(orase) == 4:
+            listorase[:4] = orase
+        elif len(orase) == 3:
+            listorase[:3] = orase
+        elif len(orase) == 2:
+            listorase[:2] = orase
+        elif len(orase) == 1:
+            listorase[:1] = orase
+        else:
+            print('n-a fost selectat nimic la orase')
+        print(listorase)
+
+
+        listformat = ['None'] * 2
+        if len(formatul) == 2:
+            listformat = formatul
+        elif len(formatul) == 1:
+            listformat[:1] = formatul
+        else:
+            print('n-a fost selectat nimic la format')
+        print(listformat)
+
+        crsr.execute("SELECT distinct facName,univName,locatie,nivel_master,aspecte_domeniu_master,format_master FROM Facs where domeniu~%(domeniu)s and (aspecte_domeniu_master~%(aspecte1)s or aspecte_domeniu_master~%(aspecte2)s or aspecte_domeniu_master~%(aspecte3)s or aspecte_domeniu_master~%(aspecte4)s or aspecte_domeniu_master~%(aspecte5)s or aspecte_domeniu_master~%(aspecte6)s or aspecte_domeniu_master~%(aspecte7)s or aspecte_domeniu_master~%(aspecte8)s or aspecte_domeniu_master~%(aspecte9)s or aspecte_domeniu_master~%(aspecte10)s) and (locatie=%(oras1)s or locatie=%(oras2)s or locatie=%(oras3)s or locatie=%(oras4)s or locatie=%(oras5)s or locatie=%(oras6)s) and (nivel_master=%(dific1)s or nivel_master=%(dific2)s or nivel_master=%(dific3)s or nivel_master=%(dific4)s) and (format_master=%(format1)s or format_master=%(format2)s)", {'domeniu': domeniu, 'aspecte1': listaspecte[0],'aspecte2': listaspecte[1], 'aspecte3': listaspecte[2],'aspecte4': listaspecte[3], 'aspecte5': listaspecte[4],'aspecte6': listaspecte[5], 'aspecte7': listaspecte[6],'aspecte8': listaspecte[7], 'aspecte9': listaspecte[8],'aspecte10': listaspecte[9], 'oras1':listorase[0], 'oras2':listorase[1], 'oras3':listorase[2], 'oras4':listorase[3], 'oras5':listorase[4], 'oras6':listorase[5], 'dific1':listdif[0], 'dific2':listdif[1], 'dific3':listdif[2],'dific4':listdif[3],'format1':listformat[0],'format2':listformat[1]})
+        date_fac_student = crsr.fetchall()
+        print(date_fac_student)
+
+        if not date_fac_student:
+            flash('Nu s-au găsit rezultate!', category='error')
+            return render_template('favs.html',date_fac_student=date_fac_student,username=request.args.get('username'))
+        else:
+            date_json = json.dumps(date_fac_student)
+            list_facs= json.loads(date_json)
+            ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5]) for x in list_facs]
+            session['lista_facs_student'] = ready_list_facs
+            session['date_fac_student'] = date_fac_student
+
+            session['lista_facs'] = False
+            session['date_fac_elev'] = False
+        
+            len_list = len(ready_list_facs)
+            conn.close()
+            return render_template('favs.html', date_fac_student=date_fac_student, len_list_student=len_list, ready_list_facs_student=ready_list_facs,username=request.args.get('username'))
+
+    return render_template('form_student.html',username=request.args.get('username'))
+
+
+
 
 @app.route('/form_elev', methods=['post', 'get'])
 def form_elev():
@@ -55,7 +170,6 @@ def form_elev():
 
         conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
         crsr = conn.cursor()
-        crsr1 = conn.cursor()
         crsr2 = conn.cursor()
 
         listdom = ['None'] * 6
@@ -125,17 +239,20 @@ def form_elev():
 
         if not date_fac:
             flash('Nu s-au găsit rezultate!', category='error')
-            return render_template('favs.html')
+            return render_template('favs.html',date_fac=date_fac,username=request.args.get('username'))
         else:
             date_json = json.dumps(date_fac)
             list_facs= json.loads(date_json)
             ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5],x[6],x[7],x[8]) for x in list_facs]
             session['lista_facs'] = ready_list_facs
+            session['date_fac_elev'] = date_fac
+
+            session['lista_facs_student'] = False
+            session['date_fac_student'] = False
         
-        len_list = len(ready_list_facs)
-        
-        conn.close()
-        return render_template('favs.html', len_list=len_list, ready_list_facs=ready_list_facs,username=request.args.get('username'))
+            len_list = len(ready_list_facs)
+            conn.close()
+            return render_template('favs.html', date_fac=date_fac, len_list=len_list, ready_list_facs=ready_list_facs,username=request.args.get('username'))
     return render_template('form_elev.html',username=request.args.get('username'))
 
 @app.route('/login', methods=['post', 'get'])
@@ -170,7 +287,14 @@ def login():
                     if username not in session:
                         session[username] = True
                         return redirect(url_for('form_elev', username=username))
-                    return redirect(url_for('favs', username=username))    
+                    return redirect(url_for('favs', username=username))  
+                elif tip == 'student':
+                    if "user" not in session:
+                        session['user'] = username
+                    if username not in session:
+                        session[username] = True
+                        return redirect(url_for('form_student', username=username))
+                    return redirect(url_for('favs', username=username))   
             crsr2.close()    
         crsr.close()
         conn.close()         

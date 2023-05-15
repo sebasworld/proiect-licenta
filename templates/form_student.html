@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <link
+  rel="stylesheet"
+  href="/static/forms.css"
+  />
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css"
+  integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp"
+  crossorigin="anonymous"
+  />
+  <script 
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" 
+  crossorigin="anonymous">
+  </script>
+  <head>  
+    <title>Formular student</title>
+  </head>
+
+  <div id="container_2">
+    <label id="description-label">Salutare, {{ username }}! Te-ai conectat cu succes!</label><br>
+    <label id="description-label1">Pentru prima conectare, te rugăm să răspunzi la întrebările de mai jos!</label><br><br>
+    <form id="survey-form" method="POST">
+      <label id="domeniu-label">Care este domeniul de studiu în care ai absolvit licența?</label><br>
+      <select id="dropdown1" name="domeniu" required >
+        <option disabled selected value>
+          Alege din opțiuni
+        </option>
+        <option value="Inginerie">
+          Inginerie
+        </option>
+        <option value="Știință & Tehnologie">
+          Știință & Tehnologie
+        </option>
+        <option value="Arte & Umanism">
+          Arte & Umanism
+        </option>
+        <option value="Afaceri & Științe Sociale">
+          Afaceri & Științe Sociale
+        </option>
+        <option value="Lingvistică & Cultură">
+          Lingvistică & Cultură
+        </option>
+        <option value="Medicină & Sănătate">
+          Medicină & Sănătate
+        </option>
+      </select> <br> <br>
+
+      <label id="aspecte-label">Ce aspecte ale domeniului tău de studiu te pasionează cel mai mult și te motivează să continui să înveți?</label><br>
+      <select id="dropdown2" name="aspecte" multiple required>
+        <option disabled selected value>
+          Alege o opțiune
+        </option>
+        <option value="Inovație și Cercetare">
+          Inovație și Cercetare
+        </option>
+        <option value="Dezvoltarea abilităților practice">
+          Dezvoltarea abilităților practice
+        </option>
+        <option value="Contribuția socială">
+          Contribuția socială
+        </option>
+        <option value="Creativitate și exprimare artistică">
+            Creativitate și exprimare artistică
+          </option>
+          <option value="Abordarea interdisciplinară">
+            Abordarea interdisciplinară
+          </option>
+          <option value="Dezvoltarea personală și profesională">
+            Dezvoltarea personală și profesională
+          </option>
+          <option value="Colaborarea și comunicarea">
+            Colaborarea și comunicarea
+          </option>
+          <option value="Leadership și management">
+            Leadership și management
+          </option>
+          <option value="Impactul economic și antreprenoriatul">
+            Impactul economic și antreprenoriatul
+          </option>
+          <option value="Sustenabilitatea și responsabilitate socială">
+            Sustenabilitatea și responsabilitate socială
+            </option>
+      </select> <br> <br>
+
+      <label id="dific-label">La ce nivel de dificultate îți dorești să se afle programele de masterat? (valoarea reprezintă o medie a dificultăților de la fiecare facultate)</label><br>
+      <select id="dropdown3" name="dific" multiple required>
+        <option disabled selected value>
+          Alege din opțiuni
+        </option>
+        <option value="2">
+          2 / 5
+        </option>
+        <option value="3">
+          3 / 5
+        </option>
+        <option value="4">
+            4 / 5
+          </option>
+          <option value="5">
+            5 / 5
+          </option>
+      </select> <br> <br>
+
+      <label id="locatie-label">Îți dorești să studiezi într-un oraș sau într-o zonă geografică specifică? </label><br>
+      <select id="dropdown4" name="orase"  multiple required> 
+        <option disabled selected value>
+          Alege din opțiuni
+        </option>
+        <option value="București">
+          București
+        </option>
+        <option value="Iași">
+          Iași
+        </option>
+        <option value="Cluj-Napoca">
+          Cluj-Napoca
+        </option>
+        <option value="Brașov">
+          Brașov
+        </option>
+        <option value="Timișoara">
+          Timișoara
+        </option>
+        <option value="Craiova">
+          Craiova
+        </option>
+      </select> <br> <br>
+
+      <label id="format-label">Care este formatul în care preferi să continui să studiezi? </label><br>
+      <select id="dropdown5" name="format"  multiple required>
+        <option disabled selected value>
+          Alege din opțiuni
+        </option>
+        <option value="Hybrid">
+          Hybrid
+        </option>
+        <option value="Fizic">
+          Fizic
+        </option>
+      </select> <br> <br>
+      <input type="submit" id="submit" name="submit" value="Submit">
+    </form>
+  </div>
+</html>

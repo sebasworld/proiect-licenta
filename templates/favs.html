@@ -41,7 +41,7 @@
     }
     </style>
 <head>
-    <title>Home</title>
+    <title>Favorite</title>
 </head>
 
 <body>
@@ -76,7 +76,7 @@
     {% endwith %} 
 
     <div style="position:relative;margin:20px">
-        
+  {% if date_fac %}      
       {% for i in range(len_list) %}
       
               <div class="column" style = "font-size: 20px;">
@@ -88,8 +88,80 @@
                   <p><b>Universitate : </b></p>
                   <p>{{ ready_list_facs[i][1] }}</p>
               </div>
-      {% endfor %}
 
+                    
+              <div class="column" style = "font-size: 20px;">
+                <p><b>Locatie : </b></p>
+                  <p>{{ ready_list_facs[i][2] }}</p>
+              </div>
+              
+              <div class="column" style="font-size: 20px;">
+                  <p><b>Rating : </b></p>
+                  <p>{{ ready_list_facs[i][3] }} /5</p>
+              </div>
+                    
+              <div class="column" style = "font-size: 20px;">
+                <p><b>Durată licenta : </b></p>
+                  <p>{{ ready_list_facs[i][4] }} ani</p>
+              </div>
+              
+              <div class="column" style="font-size: 20px;">
+                  <p><b>Plată : </b></p>
+                  <p>{{ ready_list_facs[i][5] }}</p>
+              </div>
+                    
+              <div class="column" style = "font-size: 20px;">
+                <p><b>Ultima medie de intrare de la ultima admitere : </b></p>
+                  <p>{{ ready_list_facs[i][6] }}</p>
+              </div>
+              
+              <div class="column" style="font-size: 20px;">
+                  <p><b>Domenii de studiu : </b></p>
+                  <p>{{ ready_list_facs[i][7] }}</p>
+              </div>
+
+              <div class="column" style="font-size: 20px;">
+                <p><b>Programe studiu : </b></p>
+                <p>{{ ready_list_facs[i][8] }}</p>
+            </div>
+            <br><br><br>
+      {% endfor %}
+  {% elif date_fac_student %}   
+          {% for i in range(len_list_student) %}
+      
+              <div class="column" style = "font-size: 20px;">
+                <p><b>Facultate : </b></p>
+                  <p>{{ ready_list_facs_student[i][0] }}</p>
+              </div>
+              
+              <div class="column" style="font-size: 20px;">
+                  <p><b>Universitate : </b></p>
+                  <p>{{ ready_list_facs_student[i][1] }}</p>
+              </div>
+
+                    
+              <div class="column" style = "font-size: 20px;">
+                <p><b>Locatie : </b></p>
+                  <p>{{ ready_list_facs_student[i][2] }}</p>
+              </div>
+              
+              <div class="column" style="font-size: 20px;">
+                  <p><b>Dificultate Master : </b></p>
+                  <p>{{ ready_list_facs_student[i][3] }} /5</p>
+              </div>
+                    
+              <div class="column" style = "font-size: 20px;">
+                <p><b>Aspecte aprofundate : </b></p>
+                  <p>{{ ready_list_facs_student[i][4] }}</p>
+              </div>
+              
+              <div class="column" style="font-size: 20px;">
+                  <p><b>Format studiu : </b></p>
+                  <p>{{ ready_list_facs_student[i][5] }}</p>
+              </div>
+            <br><br><br>
+      {% endfor %}
+  {% endif %}
 
   </div>
 

@@ -15,13 +15,16 @@
   integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" 
   crossorigin="anonymous">
   </script>
+  <head>  
+    <title>Formular elev</title>
+  </head>
 
   <div id="container_2">
     <label id="description-label">Salutare, {{ username }}! Te-ai conectat cu succes!</label><br>
     <label id="description-label1">Pentru prima conectare, te rugăm să răspunzi la întrebările de mai jos!</label><br><br>
     <form id="survey-form" method="POST">
       <label id="profil-label">La ce profil din cadrul liceului te încadrezi?</label><br>
-      <select id="dropdown1" name="profil" >
+      <select id="dropdown1" name="profil" required>
         <option disabled selected value>
           Alege o opțiune
         </option>
@@ -37,7 +40,7 @@
       </select> <br> <br>
 
       <label id="domeniu-label">Ce domenii de studiu superior te-ar atrage cel mai mult?</label><br>
-      <select id="dropdown2" name="domeniu" multiple >
+      <select id="dropdown2" name="domeniu" multiple required >
         <option disabled selected value>
           Alege din opțiuni
         </option>
@@ -62,7 +65,7 @@
       </select> <br> <br>
 
       <label id="admitere-label">Ce tip de admitere preferi?</label><br>
-      <select id="dropdown3" name="admitere" multiple>
+      <select id="dropdown3" name="admitere" multiple required>
         <option disabled selected value>
           Alege din opțiuni
         </option>
@@ -75,7 +78,7 @@
       </select> <br> <br>
 
       <label id="locatie-label">Selectează orașele în care ți-ai dori să studiezi.</label><br>
-      <select id="dropdown4" name="orase"  multiple>
+      <select id="dropdown4" name="orase"  multiple required> 
         <option disabled selected value>
           Alege din opțiuni
         </option>
@@ -100,7 +103,7 @@
       </select> <br> <br>
 
       <label id="taxa-label">Filtrează facultățile după taxă sau buget.</label><br>
-      <select id="dropdown5" name="taxa"  multiple>
+      <select id="dropdown5" name="taxa"  multiple required>
         <option disabled selected value>
           Alege din opțiuni
         </option>

@@ -66,31 +66,149 @@ create table Facs(
 	profilelev varchar(100) NOT NULL,
 	domeniu varchar(100) NOT NULL,
 	programestudiu varchar(100) NOT NULL,
+	nivel_master varchar(100) NOT NULL,
+	aspecte_domeniu_master varchar(100) NOT NULL,
+	format_master varchar(100) NOT NULL,
 	primary key(facid),
     unique(facid)
 );
 
 drop table Facs;
 
-insert into Facs(facid,facName,univName,locatie,
-			rating,durataLicenta,taxa,ultimaMedie,tipAdmitere,profilelev,domeniu,programestudiu)
-VALUES(1, 'Facultatea de Automatică și Calculatoare - Ingineria Sistemelor', 'Universitatea Politehnica din București','București',
-		 '4.4','4', 'taxa', '8.28', 'Examen de admitere', 'Matematică-Informatică', 'Inginerie, Știință & Tehnologie', 'licenta,master,doctorat');
+insert into Facs(
+	facid,
+	facName,
+	univName,
+	locatie,
+	rating,
+	durataLicenta,
+	taxa,
+	ultimaMedie,
+	tipAdmitere,
+	profilelev,
+	domeniu,
+	programestudiu,
+	nivel_master,
+	aspecte_domeniu_master,
+	format_master
+	)
+VALUES(
+	1,
+ 	'Facultatea de Automatică și Calculatoare - Ingineria Sistemelor',
+	'Universitatea Politehnica din București','București',
+	'4.4',
+	'4',
+	'taxa',
+	'8.28',
+	'Examen de admitere',
+	'Matematică-Informatică',
+	'Inginerie, Știință & Tehnologie',
+	'Licență, Masterat, Doctorat',
+	'3',
+	'Inovație și Cercetare, Dezvoltarea abilităților practice',
+	'Hybrid'
+);
 
-insert into Facs(facid,facName,univName,locatie,
-			rating,durataLicenta,taxa,ultimaMedie,tipAdmitere,profilelev,domeniu,programestudiu)
-VALUES(3, 'Facultatea de Automatică și Calculatoare - Ingineria Sistemelor', 'Universitatea Politehnica din București','București',
-		 '4.4', '4', 'buget', '8.37', 'Examen de admitere', 'Matematică-Informatică', 'Inginerie, Știință & Tehnologie', 'licenta,master,doctorat' );
+insert into Facs(
+	facid,
+	facName,
+	univName,
+	locatie,
+	rating,
+	durataLicenta,
+	taxa,
+	ultimaMedie,
+	tipAdmitere,
+	profilelev,
+	domeniu,
+	programestudiu,
+	nivel_master,
+	aspecte_domeniu_master,
+	format_master
+)
+VALUES(2,
+	'Facultatea de Automatică și Calculatoare - Ingineria Sistemelor',
+	'Universitatea Politehnica din București','București',
+	'4.4',
+	'4',
+	'buget',
+	'8.37',
+	'Examen de admitere',
+	'Matematică-Informatică',
+	'Inginerie, Știință & Tehnologie',
+	'Licență, Masterat, Doctorat',
+	'3',
+	'Inovație și Cercetare, Dezvoltarea abilităților practice',
+	'Hybrid'
+ );
 
-insert into Facs(facid,facName,univName,locatie,
-			rating,durataLicenta,taxa,ultimaMedie,tipAdmitere,profilelev,domeniu,programestudiu)
-VALUES(4, 'Facultatea de Automatică și Calculatoare - Calculatoare și Tehnologia Informației', 'Universitatea Politehnica din București','București',
-		 '4.4', '4', 'taxa', '8.46', 'Examen de admitere', 'Matematică-Informatică', 'Inginerie, Știință & Tehnologie','licenta,master,doctorat' );
+insert into Facs(
+	facid,
+	facName,
+	univName,
+	locatie,
+	rating,
+	durataLicenta,
+	taxa,
+	ultimaMedie,
+	tipAdmitere,
+	profilelev,
+	domeniu,
+	programestudiu,
+	nivel_master,
+	aspecte_domeniu_master,
+	format_master
+)
+VALUES(3,
+ 	'Facultatea de Automatică și Calculatoare - Calculatoare și Tehnologia Informației',
+  	'Universitatea Politehnica din București','București',
+	'4.4',
+	'4', 
+	'taxa',
+	'8.46', 
+	'Examen de admitere', 
+	'Matematică-Informatică', 
+	'Inginerie, Știință & Tehnologie',
+	'Licență, Masterat, Doctorat',
+	'3',
+	'Inovație și Cercetare, Dezvoltarea abilităților practice',
+	'Hybrid'
+);
 
-insert into Facs(facid,facName,univName,locatie,
-			rating,durataLicenta,taxa,ultimaMedie,tipAdmitere,profilelev,domeniu,programestudiu)
-VALUES(5, 'Facultatea de Automatică și Calculatoare - Calculatoare și Tehnologia Informației', 'Universitatea Politehnica din București','București',
-		 '4.4', '4', 'buget', '9.14', 'Examen de admitere', 'Matematică-Informatică', 'Inginerie, Știință & Tehnologie', 'licenta,master,doctorat' );
+insert into Facs(
+	facid,
+	facName,
+	univName,
+	locatie,
+	rating,
+	durataLicenta,
+	taxa,
+	ultimaMedie,
+	tipAdmitere,
+	profilelev,
+	domeniu,
+	programestudiu,
+	nivel_master,
+	aspecte_domeniu_master,
+	format_master
+)
+VALUES(4,
+ 	'Facultatea de Automatică și Calculatoare - Calculatoare și Tehnologia Informației',
+  	'Universitatea Politehnica din București','București',
+	'4.4',
+	'4', 
+	'buget', 
+	'9.14', 
+	'Examen de admitere', 
+	'Matematică-Informatică', 
+	'Inginerie, Știință & Tehnologie',
+	'Licență, Masterat, Doctorat',
+	'3',
+	'Inovație și Cercetare, Dezvoltarea abilităților practice',
+	'Hybrid'
+);
+
+SELECT distinct facName,univName,locatie,nivel_master,aspecte_domeniu_master,format_master FROM Facs where domeniu~'Inginerie' and (aspecte_domeniu_master~'Inovație și Cercetare' or aspecte_domeniu_master~'Dezvoltarea abilităților') and (locatie='București' or locatie='Iași') and (nivel_master='3' or nivel_master='4') and format_master='Hybrid'
 
 
 select * from Facs;
