@@ -17,7 +17,7 @@ debug mode: $env:FLASK_DEBUG = 1
 
 
 
-
+postgresql://postgres:postgres2@192.168.1.132:5432/licenta_db
 
 
 

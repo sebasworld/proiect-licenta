@@ -1,4 +1,6 @@
 from flask import Flask, render_template, url_for, request, flash, session, redirect
+from flask_session import Session
+from redis import Redis
 from datetime import timedelta
 import psycopg2
 import json
@@ -6,33 +8,66 @@ import json
 
 app = Flask(__name__)
 app.secret_key = 'secretkey'
+
+app.config['SESSION_TYPE'] = 'redis'
+app.config['SESSION_REDIS'] = Redis(host='localhost', port=6379)
+Session(app)
+
 app.permanent_session_lifetime = timedelta(days=1)
-app.config['SECRET_KEY'] = 'thisisasecretkey'
+
 
 @app.route('/', methods=['post', 'get'])
 @app.route('/welcome', methods=['post', 'get'])
 def home():
     return render_template('home.html')
 
-
 @app.route('/home', methods=['post', 'get'])
 def logged_home():
-    username = session['user']
-    return render_template('logged_home.html',username=username) 
+    return render_template('logged_home.html',username=session['user']) 
 
 
 @app.route('/univs', methods=['post', 'get'])
 def univs():
-    username = session['user']
-    return render_template('univs.html', username=username) 
+    if request.method == 'GET':
+        conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
+        crsr = conn.cursor()
+
+        crsr.execute("SELECT distinct univName,facName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu,nivel_master,aspecte_domeniu_master,format_master FROM Facs")
+        date_fac_prof_consi = crsr.fetchall()
+        print(date_fac_prof_consi)
+
+        if not date_fac_prof_consi:
+            flash('Nu s-au putut accesa facultățile!', category='error')
+            return render_template('univs.html',date_fac_prof_consi=date_fac_prof_consi,username=session['user'])
+        else:
+            date_json = json.dumps(date_fac_prof_consi)
+            list_facs= json.loads(date_json)
+            ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5], x[6],x[7],x[8],x[9],x[10],x[11]) for x in list_facs]
+
+            len_list = len(ready_list_facs)
+            conn.close()
+            return render_template('univs.html', date_fac_prof_consi=date_fac_prof_consi, len_list_prof_cons=len_list, ready_list_facs_prof_cons=ready_list_facs,username=session['user'])
+    return render_template('univs.html', username = session['user'])
+
+
 
 @app.route('/favs', methods=['post', 'get'])
 def favs():
-    if session['lista_facs'] and session['date_fac_elev'] and session['lista_facs_student']==False and session['date_fac_student']==False:
-        return render_template('favs.html', date_fac = session['date_fac_elev'], len_list=len(session['lista_facs']), ready_list_facs=session['lista_facs'], username=request.args.get('username'), username1 = session['user'] ) 
-    elif session['lista_facs_student'] and session['date_fac_student'] and session['date_fac_elev']==False and session['lista_facs']==False:
-        return render_template('favs.html', date_fac_student = session['date_fac_student'], len_list_student=len(session['lista_facs_student']), ready_list_facs_student=session['lista_facs_student'], username=request.args.get('username'), username1 = session['user'] ) 
-    return render_template('favs.html')
+    if 'user' in session:
+        user_type = session['tip']
+        user_id = session['userid']
+
+        if user_type == 'student':
+            if user_id in session.get('student', {}):
+                student_data = session['student'][user_id]
+                return render_template('favs.html', usertype = user_type,ready_list_facs_student = student_data, lungime = len(student_data), username = session['user'])
+                
+        elif user_type == 'elev':
+            if user_id in session.get('elev', {}):
+                elev_data = session['elev'][user_id]
+                return render_template('favs.html',usertype =user_type, ready_list_facs = elev_data, lungime = len(elev_data), username=session['user'])
+             
+    return render_template('favs.html', username = session['user'])
 
 
 @app.route('/logout', methods=['post', 'get'])
@@ -132,22 +167,22 @@ def form_student():
 
         if not date_fac_student:
             flash('Nu s-au găsit rezultate!', category='error')
-            return render_template('favs.html',date_fac_student=date_fac_student,username=request.args.get('username'))
+            return redirect(url_for('favs',date_fac_student=date_fac_student,username=session['user']))
         else:
             date_json = json.dumps(date_fac_student)
             list_facs= json.loads(date_json)
             ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5]) for x in list_facs]
-            session['lista_facs_student'] = ready_list_facs
-            session['date_fac_student'] = date_fac_student
+            user_type = 'student'
+            user_id = session['userid']
 
-            session['lista_facs'] = False
-            session['date_fac_elev'] = False
-        
-            len_list = len(ready_list_facs)
+            if user_type not in session:
+                session[user_type] = {}
+            session[user_type][user_id] = ready_list_facs
+            
             conn.close()
-            return render_template('favs.html', date_fac_student=date_fac_student, len_list_student=len_list, ready_list_facs_student=ready_list_facs,username=request.args.get('username'))
+            return redirect(url_for('favs'))
 
-    return render_template('form_student.html',username=request.args.get('username'))
+    return render_template('form_student.html',username=session['user'])
 
 
 
@@ -239,21 +274,21 @@ def form_elev():
 
         if not date_fac:
             flash('Nu s-au găsit rezultate!', category='error')
-            return render_template('favs.html',date_fac=date_fac,username=request.args.get('username'))
+            return redirect(url_for('favs',date_fac=date_fac,username=session['user']))
         else:
             date_json = json.dumps(date_fac)
             list_facs= json.loads(date_json)
             ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5],x[6],x[7],x[8]) for x in list_facs]
-            session['lista_facs'] = ready_list_facs
-            session['date_fac_elev'] = date_fac
+            user_type = 'elev'
+            user_id = session['userid']
 
-            session['lista_facs_student'] = False
-            session['date_fac_student'] = False
-        
-            len_list = len(ready_list_facs)
+            if user_type not in session:
+                session[user_type] = {}
+            session[user_type][user_id] = ready_list_facs
+
             conn.close()
-            return render_template('favs.html', date_fac=date_fac, len_list=len_list, ready_list_facs=ready_list_facs,username=request.args.get('username'))
-    return render_template('form_elev.html',username=request.args.get('username'))
+            return redirect(url_for('favs'))
+    return render_template('form_elev.html',username=session['user'])
 
 @app.route('/login', methods=['post', 'get'])
 def login():
@@ -276,25 +311,40 @@ def login():
         else:
             #flash('V-ați logat cu succes!', category='success')
             crsr2 = conn.cursor()
-            crsr2.execute("select tip from Users where username=%(username)s and passwd=%(passwd)s", {'username': username, 'passwd': password})
+            crsr2.execute("select tip,userid,random_string from Users where username=%(username)s and passwd=%(passwd)s", {'username': username, 'passwd': password})
             data = crsr2.fetchall()
             if data:
                 tip = str(data[0][0])
+                userid = str(data[0][1])
                 print(tip)
+                print(userid)
                 if tip == 'elev':
                     if "user" not in session:
                         session['user'] = username
+                        session['userid'] = userid   
+                        session['tip'] = tip                      
                     if username not in session:
                         session[username] = True
-                        return redirect(url_for('form_elev', username=username))
-                    return redirect(url_for('favs', username=username))  
+                        return redirect(url_for('form_elev'))
+                    return redirect(url_for('favs'))  
                 elif tip == 'student':
                     if "user" not in session:
                         session['user'] = username
+                        session['userid'] = userid
+                        session['tip'] = tip 
                     if username not in session:
                         session[username] = True
-                        return redirect(url_for('form_student', username=username))
-                    return redirect(url_for('favs', username=username))   
+                        return redirect(url_for('form_student'))
+                    return redirect(url_for('favs'))   
+                elif tip == 'profesor' or tip == 'consilier cariera':
+                    if "user" not in session:
+                        session['user'] = username
+                        session['tip'] = tip 
+                        session['userid'] = userid
+                    if username not in session:
+                        session[username] = True
+                        return redirect(url_for('univs'))
+                    return redirect(url_for('univs'))
             crsr2.close()    
         crsr.close()
         conn.close()         

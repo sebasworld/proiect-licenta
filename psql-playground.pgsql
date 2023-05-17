@@ -1,17 +1,38 @@
 create table Users(
+	userid SERIAL PRIMARY KEY,
 	username varchar(50) NOT NULL,
 	tip varchar(50) NOT NULL,
 	passwd varchar(50) NOT NULL,
-	primary key(username),
-    unique(username)	
+    unique(username)
 );
 
 select * from Users;
 
+ALTER TABLE Users
+ADD COLUMN id SERIAL PRIMARY KEY;
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+ALTER TABLE Users ADD COLUMN random_string VARCHAR(5);
+
+CREATE OR REPLACE FUNCTION generate_random_string()
+  RETURNS TRIGGER AS $$
+BEGIN
+  NEW.random_string := substring(md5(random()::text), 1, 5);
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER insert_random_string
+  BEFORE INSERT ON Users
+  FOR EACH ROW
+  EXECUTE FUNCTION generate_random_string();
+
+
 insert into Users(username,tip,passwd)
 VALUES('username', 'tip', 'passwd');
 
-delete from Users where username='deelayy'
+delete from Users where username='sebi123'
 
 drop table TipUsers;
 drop table Users;
@@ -216,6 +237,7 @@ SELECT * FROM Facs WHERE 1 = 1 and domeniu ~ 'Inginerie'
 select tip from Users where username='Salut' and passwd='salut123'
 select * from Users
 
+SELECT distinct univName,facName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu,nivel_master,aspecte_domeniu_master,format_master FROM Facs
 SELECT distinct facName,univName FROM Facs where profilelev='Matematică-Informatică'
 
 delete all from Facs where facid=1;
