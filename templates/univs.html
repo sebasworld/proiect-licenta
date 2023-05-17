@@ -47,7 +47,7 @@
 <body>
     <div class="topnav">
       <a href="{{url_for('logged_home')}}">Acasă</a>
-      <a class="active" href="{{url_for('univs')}}">Universități</a>
+      <a class="active" href="{{url_for('univs')}}">Toate facultățile</a>
       <a href="{{url_for('favs')}}">Favorite</a>
       <a class="right" href="{{url_for('logout')}}">Delogare ({{ username }})</a>
     </div>
@@ -73,71 +73,77 @@
     {% endwith %} 
 
 <div style="position:relative;margin:20px">
+  <div class="search-panel">
+    <input type="text" id="searchInput" placeholder="Căutați o facultate...">
+  </div>
   {% if date_fac_prof_consi %}      
       {% for i in range(len_list_prof_cons) %}
-      
-              <div class="column" style = "font-size: 20px;">
-                <p><b>Universitate : </b></p>
-                  <p>{{ ready_list_facs_prof_cons[i][0] }}</p>
-              </div>
-              
-              <div class="column" style="font-size: 20px;">
-                  <p><b>Facultate : </b></p>
-                  <p>{{ ready_list_facs_prof_cons[i][1] }}</p>
-              </div>
-
-                    
-              <div class="column" style = "font-size: 20px;">
-                <p><b>Locatie : </b></p>
-                  <p>{{ ready_list_facs_prof_cons[i][2] }}</p>
-              </div>
-              
-              <div class="column" style="font-size: 20px;">
-                  <p><b>Rating : </b></p>
-                  <p>{{ ready_list_facs_prof_cons[i][3] }} /5</p>
-              </div>
-                    
-              <div class="column" style = "font-size: 20px;">
-                <p><b>Durată licenta : </b></p>
-                  <p>{{ ready_list_facs_prof_cons[i][4] }} ani</p>
-              </div>
-              
-              <div class="column" style="font-size: 20px;">
-                  <p><b>Plată : </b></p>
-                  <p>{{ ready_list_facs_prof_cons[i][5] }}</p>
-              </div>
-                    
-              <div class="column" style = "font-size: 20px;">
-                <p><b>Ultima medie de intrare de la ultima admitere : </b></p>
-                  <p>{{ ready_list_facs_prof_cons[i][6] }}</p>
-              </div>
-              
-              <div class="column" style="font-size: 20px;">
-                  <p><b>Domenii de studiu : </b></p>
-                  <p>{{ ready_list_facs_prof_cons[i][7] }}</p>
-              </div>
-
-              <div class="column" style="font-size: 20px;">
-                <p><b>Programe studiu : </b></p>
-                <p>{{ ready_list_facs_prof_cons[i][8] }}</p>
+      <div class="panel panel-collapsed">
+        <div class="panel-toggle">
+          <span class="arrow">▼</span>
+        </div>
+        <div class="panel-title">
+          <div class="grid-container">
+            <div class="grid-item">
+              <br><br>
+              <p style="font-size: 20px;"><b>{{ ready_list_facs_prof_cons[i][1] }}</b></p>
+              <p style="font-size: 20px;"><b>{{ ready_list_facs_prof_cons[i][0] }}, {{ ready_list_facs_prof_cons[i][2] }}</b></p>
+              <p style="font-size: 20px;"><b>Mod învățământ: {{ ready_list_facs_prof_cons[i][5] }}</b></p>
             </div>
-
-            <div class="column" style="font-size: 20px;">
-              <p><b>Nivel master: </b></p>
-              <p>{{ ready_list_facs_prof_cons[i][9] }}</p>
+            <div class="grid-item">
+              <img src="data:image/png;base64,{{ ready_list_facs_prof_cons[i][12] }}" alt="Image" width="200">
+            </div>
           </div>
-
-            <div class="column" style="font-size: 20px;">
-              <p><b>Aspecte aprofundate in cadrul masterelor: </b></p>
-              <p>{{ ready_list_facs_prof_cons[i][10] }}</p>
-          </div>
-
-            <div class="column" style="font-size: 20px;">
-              <p><b>Format studiu master: </b></p>
-              <p>{{ ready_list_facs_prof_cons[i][11] }}</p>
-          </div>
-            <br><br><br>
-      {% endfor %}
-   {% endif %}
+        </div>      
+      <div class="panel-content">
+        <div class="column">
+          <p><b>Domeniile de studiu în cadrul pregătirii academice: </b>{{ ready_list_facs_prof_cons[i][7] }}</p>
+          <p><b>Programe de studiu disponibile în cadrul facultății: </b>{{ ready_list_facs_prof_cons[i][8] }}</p>
+          <p><b>Rating-ul nivelului academic de pregătire: </b>{{ ready_list_facs_prof_cons[i][3] }}/5</p>
+        </div>
+        <div class="column">
+          <p><b>Durată pregătire licență: </b>{{ ready_list_facs_prof_cons[i][4] }} ani</p>
+        </div>
+        <div class="column">
+          <p><b>Ultima medie de intrare din cadrul ultimei sesiuni de admitere: </b>{{ ready_list_facs_prof_cons[i][6] }}, la {{ ready_list_facs_prof_cons[i][5] }}</p>
+        </div>
+        <div class="column">
+          <p><b>Dificultate programe master (medie): </b>{{ ready_list_facs_prof_cons[i][9] }}/5</p>
+        </div>
+        <div class="column">
+          <p><b>Aspecte aprofundate în cadrul programelor de masterat: </b>{{ ready_list_facs_prof_cons[i][10] }}</p>
+        </div>
+        <div class="column">
+          <p><b>Formatul de studiu abordat în cadrul programelor de masterat: </b>{{ ready_list_facs_prof_cons[i][11] }}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
   </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('.panel-toggle').click(function() {
+        $(this).closest('.panel').toggleClass('panel-expanded panel-collapsed');
+      });
+    });
+  </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // Filter panels based on search input
+    $('#searchInput').on('input', function() {
+      var searchValue = $(this).val().toLowerCase();
+      $('.panel').each(function() {
+        var panelText = $(this).text().toLowerCase();
+        if (panelText.indexOf(searchValue) > -1) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+    });
+  });
+</script>
+   {% endif %}
 </html>

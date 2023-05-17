@@ -66,3 +66,57 @@ body {
    .topnav p.right {
     float: right;
   }
+
+  .panel {
+    margin: 2em 5em 3em 5em;
+    padding: 2em 6em 2em 6em;
+    background: rgb(2, 0, 36);
+    background: linear-gradient(117deg, rgba(2, 0, 36, 1) 0%, rgba(125, 129, 150, 0.9757503221014968) 96%, rgba(222, 199, 45, 1) 98%, rgba(222, 199, 45, 1) 98%, rgba(142, 49, 242, 0.5859143339953169) 98%);
+    color: #fff;
+    font-family: cursive;
+    border-radius: 1.25rem;
+    position: relative; /* Add this line */
+  }
+  
+  .panel img {
+    max-width: 300px;
+    max-height: 200px;
+  }
+  
+  .panel-content {
+    display: none;
+  }
+
+  .panel-toggle {
+    position: absolute;
+    bottom: 10px; /* Adjust the value as needed */
+    left: 10px; /* Adjust the value as needed */
+    padding: 5px;
+    background-color: transparent;
+    cursor: pointer;
+  }
+  
+  .arrow {
+    font-size: 16px;
+    color: white;
+  }
+
+  .panel-title {
+    cursor: pointer;
+  }
+  
+  .panel-expanded .panel-content {
+    display: block;
+  }
+
+  .panel-collapsed .panel-content {
+    display: none;
+  }
+  
+  .grid-container {
+    display: grid;
+    grid-template-columns: 1fr 0.3fr;
+    gap: 0.1em;
+  }
+
+  

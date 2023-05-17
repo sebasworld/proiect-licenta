@@ -47,7 +47,7 @@
 <body>
     <div class="topnav">
       <a href="{{url_for('logged_home')}}">Acasă</a>
-      <a href="{{url_for('univs')}}">Universități</a>
+      <a href="{{url_for('univs')}}">Toate facultățile</a>
       <a class="active" href="{{url_for('favs')}}">Favorite</a>
       {% if username %}
           <a class="right" href="{{url_for('logout')}}">Delogare ({{ username }})</a>
@@ -75,94 +75,91 @@
         {% endif %}
     {% endwith %} 
 
-    <div style="position:relative;margin:20px">
+<div style="position:relative;margin:20px">
   {% if usertype =='elev' %}      
-      {% for i in range(lungime) %}
-      
-              <div class="column" style = "font-size: 20px;">
-                <p><b>Facultate : </b></p>
-                  <p>{{ ready_list_facs[i][0] }}</p>
-              </div>
-              
-              <div class="column" style="font-size: 20px;">
-                  <p><b>Universitate : </b></p>
-                  <p>{{ ready_list_facs[i][1] }}</p>
-              </div>
-
-                    
-              <div class="column" style = "font-size: 20px;">
-                <p><b>Locatie : </b></p>
-                  <p>{{ ready_list_facs[i][2] }}</p>
-              </div>
-              
-              <div class="column" style="font-size: 20px;">
-                  <p><b>Rating : </b></p>
-                  <p>{{ ready_list_facs[i][3] }} /5</p>
-              </div>
-                    
-              <div class="column" style = "font-size: 20px;">
-                <p><b>Durată licenta : </b></p>
-                  <p>{{ ready_list_facs[i][4] }} ani</p>
-              </div>
-              
-              <div class="column" style="font-size: 20px;">
-                  <p><b>Plată : </b></p>
-                  <p>{{ ready_list_facs[i][5] }}</p>
-              </div>
-                    
-              <div class="column" style = "font-size: 20px;">
-                <p><b>Ultima medie de intrare de la ultima admitere : </b></p>
-                  <p>{{ ready_list_facs[i][6] }}</p>
-              </div>
-              
-              <div class="column" style="font-size: 20px;">
-                  <p><b>Domenii de studiu : </b></p>
-                  <p>{{ ready_list_facs[i][7] }}</p>
-              </div>
-
-              <div class="column" style="font-size: 20px;">
-                <p><b>Programe studiu : </b></p>
-                <p>{{ ready_list_facs[i][8] }}</p>
-            </div>
-            <br><br><br>
-      {% endfor %}
+    {% for i in range(lungime) %}
+    <div class="panel panel-collapsed">
+      <div class="panel-toggle">
+        <span class="arrow">▼</span>
+      </div>
+      <div class="panel-title">
+        <div class="grid-container">
+          <div class="grid-item">
+            <br><br>
+            <p style="font-size: 20px;"><b>{{ ready_list_facs[i][0] }}</b></p>
+            <p style="font-size: 20px;"><b>{{ ready_list_facs[i][1] }}, {{ ready_list_facs[i][2] }}</b></p>
+            <p style="font-size: 20px;"><b>Mod învățământ: {{ ready_list_facs[i][5] }}</b></p>
+          </div>
+          <div class="grid-item">
+            <img src="data:image/png;base64,{{ ready_list_facs[i][9] }}" alt="Image" width="200">
+          </div>
+        </div>
+      </div>      
+    <div class="panel-content">
+      <div class="column">
+        <p><b>Domeniile de studiu în cadrul pregătirii academice: </b>{{ ready_list_facs[i][7] }}</p>
+        <p><b>Programe de studiu disponibile în cadrul facultății: </b>{{ ready_list_facs[i][8] }}</p>
+        <p><b>Rating-ul nivelului academic de pregătire: </b>{{ ready_list_facs[i][3] }}/5</p>
+      </div>
+      <div class="column">
+        <p><b>Durată pregătire licență: </b>{{ ready_list_facs[i][4] }} ani</p>
+      </div>
+      <div class="column">
+        <p><b>Ultima medie de intrare din cadrul ultimei sesiuni de admitere: </b>{{ ready_list_facs[i][6] }}, la {{ ready_list_facs[i][5] }}</p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('.panel-toggle').click(function() {
+      $(this).closest('.panel').toggleClass('panel-expanded panel-collapsed');
+    });
+  });
+</script>
+<div style="position:relative;margin:20px">
   {% elif usertype == 'student' %}   
           {% for i in range(lungime) %}
-      
-              <div class="column" style = "font-size: 20px;">
-                <p><b>Facultate : </b></p>
-                  <p>{{ ready_list_facs_student[i][0] }}</p>
+          <div class="panel panel-collapsed">
+            <div class="panel-toggle">
+              <span class="arrow">▼</span>
+            </div>
+            <div class="panel-title">
+              <div class="grid-container">
+                <div class="grid-item">
+                  <br><br>
+                  <p style="font-size: 20px;"><b>{{ ready_list_facs_student[i][0] }}</b></p>
+                  <p style="font-size: 20px;"><b>{{ ready_list_facs_student[i][1] }}, {{ ready_list_facs_student[i][2] }}</b></p>
+                </div>
+                <div class="grid-item">
+                  <img src="data:image/png;base64,{{ ready_list_facs_student[i][6] }}" alt="Image" width="200">
+                </div>
               </div>
-              
-              <div class="column" style="font-size: 20px;">
-                  <p><b>Universitate : </b></p>
-                  <p>{{ ready_list_facs_student[i][1] }}</p>
+            </div>      
+            <div class="panel-content">
+              <div class="column">
+                <p><b>Dificultate programe master (medie): </b>{{ ready_list_facs_student[i][3] }}/5</p>
               </div>
-
-                    
-              <div class="column" style = "font-size: 20px;">
-                <p><b>Locatie : </b></p>
-                  <p>{{ ready_list_facs_student[i][2] }}</p>
+              <div class="column">
+                <p><b>Aspecte aprofundate în cadrul programelor de masterat: </b>{{ ready_list_facs_student[i][4] }}</p>
               </div>
-              
-              <div class="column" style="font-size: 20px;">
-                  <p><b>Dificultate Master : </b></p>
-                  <p>{{ ready_list_facs_student[i][3] }} /5</p>
+              <div class="column">
+                <p><b>Formatul de studiu abordat în cadrul programelor de masterat: </b>{{ ready_list_facs_student[i][5] }}</p>
               </div>
-                    
-              <div class="column" style = "font-size: 20px;">
-                <p><b>Aspecte aprofundate : </b></p>
-                  <p>{{ ready_list_facs_student[i][4] }}</p>
-              </div>
-              
-              <div class="column" style="font-size: 20px;">
-                  <p><b>Format studiu : </b></p>
-                  <p>{{ ready_list_facs_student[i][5] }}</p>
-              </div>
-            <br><br><br>
+            </div>
+          </div>
       {% endfor %}
-  {% endif %}
-
-  </div>
+</div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('.panel-toggle').click(function() {
+        $(this).closest('.panel').toggleClass('panel-expanded panel-collapsed');
+      });
+    });
+  </script>
+{% endif %}
 
 </html>

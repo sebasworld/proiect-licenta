@@ -116,10 +116,11 @@ insert into Facs(
 VALUES(
 	1,
  	'Facultatea de Automatică și Calculatoare - Ingineria Sistemelor',
-	'Universitatea Politehnica din București','București',
+	'Universitatea Politehnica din București',
+	'București',
 	'4.4',
 	'4',
-	'taxa',
+	'Taxă',
 	'8.28',
 	'Examen de admitere',
 	'Matematică-Informatică',
@@ -149,10 +150,11 @@ insert into Facs(
 )
 VALUES(2,
 	'Facultatea de Automatică și Calculatoare - Ingineria Sistemelor',
-	'Universitatea Politehnica din București','București',
+	'Universitatea Politehnica din București',
+	'București',
 	'4.4',
 	'4',
-	'buget',
+	'Buget',
 	'8.37',
 	'Examen de admitere',
 	'Matematică-Informatică',
@@ -182,10 +184,11 @@ insert into Facs(
 )
 VALUES(3,
  	'Facultatea de Automatică și Calculatoare - Calculatoare și Tehnologia Informației',
-  	'Universitatea Politehnica din București','București',
+  	'Universitatea Politehnica din București',
+	'București',
 	'4.4',
 	'4', 
-	'taxa',
+	'Taxă',
 	'8.46', 
 	'Examen de admitere', 
 	'Matematică-Informatică', 
@@ -215,10 +218,11 @@ insert into Facs(
 )
 VALUES(4,
  	'Facultatea de Automatică și Calculatoare - Calculatoare și Tehnologia Informației',
-  	'Universitatea Politehnica din București','București',
+  	'Universitatea Politehnica din București',
+	'București',
 	'4.4',
 	'4', 
-	'buget', 
+	'Buget', 
 	'9.14', 
 	'Examen de admitere', 
 	'Matematică-Informatică', 
@@ -230,6 +234,10 @@ VALUES(4,
 );
 
 SELECT distinct facName,univName,locatie,nivel_master,aspecte_domeniu_master,format_master FROM Facs where domeniu~'Inginerie' and (aspecte_domeniu_master~'Inovație și Cercetare' or aspecte_domeniu_master~'Dezvoltarea abilităților') and (locatie='București' or locatie='Iași') and (nivel_master='3' or nivel_master='4') and format_master='Hybrid'
+
+
+ALTER TABLE Facs
+ADD COLUMN facimg bytea;
 
 
 select * from Facs;

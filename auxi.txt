@@ -97,3 +97,68 @@ def display_data():
 In this example, we first check if the `'user'` key exists in the session to ensure that a user is logged in. Then, we retrieve the user type and user ID from the session. Based on the user type, we retrieve the corresponding data from the session using the user ID.
 
 Make sure that when storing the data in the session, you use the same structure (`session['student']` and `session['elev']`) to store the data for each user type.
+
+
+<img src="data:image/png;base64,{{ ready_list_facs[i][9] }}" alt="Image" width = "200"
+
+<div class="column" style = "font-size: 20px;">
+                <p><b>Universitate : </b></p>
+                  <p>{{ ready_list_facs_prof_cons[i][0] }}</p>
+              </div>
+              
+              <div class="column" style="font-size: 20px;">
+                  <p><b>Facultate : </b></p>
+                  <p>{{ ready_list_facs_prof_cons[i][1] }}</p>
+              </div>
+
+                    
+              <div class="column" style = "font-size: 20px;">
+                <p><b>Locatie : </b></p>
+                  <p>{{ ready_list_facs_prof_cons[i][2] }}</p>
+              </div>
+              
+              <div class="column" style="font-size: 20px;">
+                  <p><b>Rating : </b></p>
+                  <p>{{ ready_list_facs_prof_cons[i][3] }} /5</p>
+              </div>
+                    
+              <div class="column" style = "font-size: 20px;">
+                <p><b>Durată licenta : </b></p>
+                  <p>{{ ready_list_facs_prof_cons[i][4] }} ani</p>
+              </div>
+              
+              <div class="column" style="font-size: 20px;">
+                  <p><b>Plată : </b></p>
+                  <p>{{ ready_list_facs_prof_cons[i][5] }}</p>
+              </div>
+                    
+              <div class="column" style = "font-size: 20px;">
+                <p><b>Ultima medie de intrare de la ultima admitere : </b></p>
+                  <p>{{ ready_list_facs_prof_cons[i][6] }}</p>
+              </div>
+              
+              <div class="column" style="font-size: 20px;">
+                  <p><b>Domenii de studiu : </b></p>
+                  <p>{{ ready_list_facs_prof_cons[i][7] }}</p>
+              </div>
+
+              <div class="column" style="font-size: 20px;">
+                <p><b>Programe studiu : </b></p>
+                <p>{{ ready_list_facs_prof_cons[i][8] }}</p>
+            </div>
+
+            <div class="column" style="font-size: 20px;">
+              <p><b>Nivel master: </b></p>
+              <p>{{ ready_list_facs_prof_cons[i][9] }}</p>
+          </div>
+
+            <div class="column" style="font-size: 20px;">
+              <p><b>Aspecte aprofundate in cadrul masterelor: </b></p>
+              <p>{{ ready_list_facs_prof_cons[i][10] }}</p>
+          </div>
+
+            <div class="column" style="font-size: 20px;">
+              <p><b>Format studiu master: </b></p>
+              <p>{{ ready_list_facs_prof_cons[i][11] }}</p>
+          </div>
+            <br><br><br>
