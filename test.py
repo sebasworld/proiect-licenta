@@ -74,7 +74,6 @@ def favs():
              
     return render_template('favs.html', username = session['user'])
 
-
 @app.route('/logout', methods=['post', 'get'])
 def logout():
     session.pop('user', None)
@@ -194,8 +193,37 @@ def form_student():
 
     return render_template('form_student.html',username=session['user'])
 
+@app.route('/remove_panel', methods=['POST'])
+def remove_panel():
+    user_type = request.form.get('userType')
+    index_str = request.form.get('index')
 
+    if user_type is None or index_str is None:
+        return 'Invalid request data.'
 
+    try:
+        index = int(index_str)
+    except (ValueError, TypeError):
+        return 'Invalid index value.'
+
+    # Remove the panel data from the session based on the user type and index
+    if user_type == 'elev' and session.get('elev'):
+        elev_data = session['elev'].get(session['userid'])
+        if elev_data and 0 <= index < len(elev_data):
+            del elev_data[index]
+        else:
+            return 'User data not found in session.'
+    elif user_type == 'student' and session.get('student'):
+        student_data = session['student'].get(session['userid'])
+        if student_data and 0 <= index < len(student_data):
+            del student_data[index]
+        else:
+            return 'User data not found in session.'
+    else:
+        return 'Invalid user type.'
+
+    return redirect(url_for('favs'))
+ 
 
 @app.route('/form_elev', methods=['post', 'get'])
 def form_elev():

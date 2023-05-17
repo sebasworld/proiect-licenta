@@ -235,7 +235,7 @@ VALUES(4,
 
 SELECT distinct facName,univName,locatie,nivel_master,aspecte_domeniu_master,format_master FROM Facs where domeniu~'Inginerie' and (aspecte_domeniu_master~'Inovație și Cercetare' or aspecte_domeniu_master~'Dezvoltarea abilităților') and (locatie='București' or locatie='Iași') and (nivel_master='3' or nivel_master='4') and format_master='Hybrid'
 
-
+SELECT distinct facName,univName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu FROM Facs where profilelev='Matematică-Informatică' and taxa='Taxă' and (domeniu~'Știință & Tehnologie' or domeniu~'Arte & Umanism' or domeniu~'Afaceri & Științe Sociale'or domeniu~'Lingvistică & Cultură' or domeniu~'Inginerie' or domeniu~'Medicină & Sănătate') and (locatie='București' or locatie='Iași' or locatie='Cluj-Napoca' or locatie='Brașov'or locatie='Timișoara' or locatie='Craiova') and (tipAdmitere='Examen de admitere' or tipAdmitere='Pe bază de dosar') 
 ALTER TABLE Facs
 ADD COLUMN facimg bytea;
 

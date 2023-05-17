@@ -108,6 +108,7 @@
         <p><b>Ultima medie de intrare din cadrul ultimei sesiuni de admitere: </b>{{ ready_list_facs[i][6] }}, la {{ ready_list_facs[i][5] }}</p>
       </div>
     </div>
+    <button class="delete-button" data-user-type="{{ usertype }}" data-index="{{ loop.index0 }}" onclick="removePanel(event)">Șterge din Favorite</button>
   </div>
   {% endfor %}
 </div>
@@ -118,6 +119,30 @@
       $(this).closest('.panel').toggleClass('panel-expanded panel-collapsed');
     });
   });
+  function removePanel(event) {
+    var userType = event.target.dataset.userType;
+    var index = event.target.dataset.index;
+
+    // Send an AJAX request to the remove_panel route
+    $.ajax({
+      type: 'POST',
+      url: '/remove_panel',
+      data: {
+        userType: userType,
+        index: index
+      },
+      success: function(response) {
+        // Handle the response from the server
+        console.log(response);
+        location.reload();
+        // Refresh or update the panel list as needed
+      },
+      error: function(xhr, status, error) {
+        // Handle errors
+        console.log(error);
+      }
+    });
+  }
 </script>
 <div style="position:relative;margin:20px">
   {% elif usertype == 'student' %}   
@@ -149,6 +174,7 @@
                 <p><b>Formatul de studiu abordat în cadrul programelor de masterat: </b>{{ ready_list_facs_student[i][5] }}</p>
               </div>
             </div>
+            <button class="delete-button" data-user-type="{{ usertype }}" data-index="{{ loop.index0 }}" onclick="removePanel(event)">Șterge din Favorite</button>
           </div>
       {% endfor %}
 </div>
@@ -159,6 +185,30 @@
         $(this).closest('.panel').toggleClass('panel-expanded panel-collapsed');
       });
     });
+    function removePanel(event) {
+      var userType = event.target.dataset.userType;
+      var index = event.target.dataset.index;
+  
+      // Send an AJAX request to the remove_panel route
+      $.ajax({
+        type: 'POST',
+        url: '/remove_panel',
+        data: {
+          userType: userType,
+          index: index
+        },
+        success: function(response) {
+          // Handle the response from the server
+          console.log(response);
+          location.reload();
+          // Refresh or update the panel list as needed
+        },
+        error: function(xhr, status, error) {
+          // Handle errors
+          console.log(error);
+        }
+      });
+    }
   </script>
 {% endif %}
 
