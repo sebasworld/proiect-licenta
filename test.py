@@ -22,6 +22,42 @@ app.permanent_session_lifetime = timedelta(days=1)
 def home():
     return render_template('home.html')
 
+@app.route('/admin_home', methods=['post', 'get'])
+def admin_home():
+    return render_template('admin_home.html', username = session['user'])
+
+@app.route('/admin_univs', methods=['post', 'get'])
+def admin_univs():
+    if request.method == 'GET':
+        conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
+        crsr = conn.cursor()
+
+        crsr.execute("SELECT distinct facName, univName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu,encode(facimg, 'base64') as imagine, nivel_master,aspecte_domeniu_master,format_master FROM Facs")
+        date_fac = crsr.fetchall()
+
+        if not date_fac:
+            flash('Nu s-au putut accesa facultățile!', category='error')
+            return render_template('admin_univs.html',date_fac=date_fac,username=session['user'])
+        else:
+            date_json = json.dumps(date_fac)
+            list_facs= json.loads(date_json)
+            ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5], x[6],x[7],x[8],x[9],x[10],x[11],x[12]) for x in list_facs]
+            for x in list_facs:
+                image_bytes = bytes(x[9], encoding='utf-8')
+                decoded_image = base64.b64encode(image_bytes).decode('utf-8')
+                x[9] = decoded_image
+
+            session['ready_list_facs'] = ready_list_facs
+            len_list = len(ready_list_facs)
+            conn.close()
+            return render_template('admin_univs.html', date_fac=date_fac, len_list=len_list, ready_list_facs=ready_list_facs,username=session['user'])
+    
+    return render_template('admin_univs.html', username = session['user'])
+
+@app.route('/admin_users', methods=['post', 'get'])
+def admin_users():
+    return render_template('admin_users.html', username = session['user'])
+
 @app.route('/home', methods=['post', 'get'])
 def logged_home():
     return render_template('logged_home.html',username=session['user']) 
@@ -30,28 +66,57 @@ def logged_home():
 @app.route('/univs', methods=['post', 'get'])
 def univs():
     if request.method == 'GET':
-        conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
-        crsr = conn.cursor()
+        user_type = session['tip']
+        if user_type == 'elev' or user_type == 'profesor' or user_type == 'consilier cariera':
+            conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
+            crsr = conn.cursor()
 
-        crsr.execute("SELECT distinct univName,facName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu,nivel_master,aspecte_domeniu_master,format_master,encode(facimg, 'base64') as imagine FROM Facs")
-        date_fac_prof_consi = crsr.fetchall()
-        #print(date_fac_prof_consi)
+            crsr.execute("SELECT distinct facName, univName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu,encode(facimg, 'base64') as imagine, nivel_master,aspecte_domeniu_master,format_master FROM Facs")
+            date_fac_prof_consi = crsr.fetchall()
+            #print(date_fac_prof_consi)
 
-        if not date_fac_prof_consi:
-            flash('Nu s-au putut accesa facultățile!', category='error')
-            return render_template('univs.html',date_fac_prof_consi=date_fac_prof_consi,username=session['user'])
-        else:
-            date_json = json.dumps(date_fac_prof_consi)
-            list_facs= json.loads(date_json)
-            ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5], x[6],x[7],x[8],x[9],x[10],x[11],x[12]) for x in list_facs]
-            for x in list_facs:
-                image_bytes = bytes(x[12], encoding='utf-8')
-                decoded_image = base64.b64encode(image_bytes).decode('utf-8')
-                x[12] = decoded_image
+            if not date_fac_prof_consi:
+                flash('Nu s-au putut accesa facultățile!', category='error')
+                return render_template('univs.html',date_fac_prof_consi=date_fac_prof_consi,username=session['user'])
+            else:
+                date_json = json.dumps(date_fac_prof_consi)
+                list_facs= json.loads(date_json)
+                ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5], x[6],x[7],x[8],x[9],x[10],x[11],x[12]) for x in list_facs]
+                for x in list_facs:
+                    image_bytes = bytes(x[9], encoding='utf-8')
+                    decoded_image = base64.b64encode(image_bytes).decode('utf-8')
+                    x[9] = decoded_image
 
-            len_list = len(ready_list_facs)
-            conn.close()
-            return render_template('univs.html', date_fac_prof_consi=date_fac_prof_consi, len_list_prof_cons=len_list, ready_list_facs_prof_cons=ready_list_facs,username=session['user'])
+                session['ready_list_facs_prof_cons'] = ready_list_facs
+
+                len_list = len(ready_list_facs)
+                conn.close()
+                return render_template('univs.html', usertype = user_type,date_fac_prof_consi=date_fac_prof_consi, len_list_prof_cons=len_list, ready_list_facs_prof_cons=ready_list_facs,username=session['user'])
+        elif user_type == 'student':
+            conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
+            crsr = conn.cursor()
+
+            crsr.execute("SELECT distinct facName, univName,locatie,encode(facimg, 'base64') as imagine, nivel_master,aspecte_domeniu_master,format_master FROM Facs")
+            date_fac_prof_consi = crsr.fetchall()
+            #print(date_fac_prof_consi)
+
+            if not date_fac_prof_consi:
+                flash('Nu s-au putut accesa facultățile!', category='error')
+                return render_template('univs.html',date_fac_prof_consi=date_fac_prof_consi,username=session['user'])
+            else:
+                date_json = json.dumps(date_fac_prof_consi)
+                list_facs= json.loads(date_json)
+                ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5], x[6]) for x in list_facs]
+                for x in list_facs:
+                    image_bytes = bytes(x[3], encoding='utf-8')
+                    decoded_image = base64.b64encode(image_bytes).decode('utf-8')
+                    x[3] = decoded_image
+
+                session['ready_list_facs_prof_cons'] = ready_list_facs
+
+                len_list = len(ready_list_facs)
+                conn.close()
+                return render_template('univs.html', usertype = user_type, date_fac_prof_consi=date_fac_prof_consi, len_list_prof_cons=len_list, ready_list_facs_prof_cons=ready_list_facs,username=session['user'])
     return render_template('univs.html', username = session['user'])
 
 
@@ -165,7 +230,7 @@ def form_student():
             print('n-a fost selectat nimic la format')
         print(listformat)
 
-        crsr.execute("SELECT distinct facName,univName,locatie,nivel_master,aspecte_domeniu_master,format_master,encode(facimg, 'base64') as imagine FROM Facs where domeniu~%(domeniu)s and (aspecte_domeniu_master~%(aspecte1)s or aspecte_domeniu_master~%(aspecte2)s or aspecte_domeniu_master~%(aspecte3)s or aspecte_domeniu_master~%(aspecte4)s or aspecte_domeniu_master~%(aspecte5)s or aspecte_domeniu_master~%(aspecte6)s or aspecte_domeniu_master~%(aspecte7)s or aspecte_domeniu_master~%(aspecte8)s or aspecte_domeniu_master~%(aspecte9)s or aspecte_domeniu_master~%(aspecte10)s) and (locatie=%(oras1)s or locatie=%(oras2)s or locatie=%(oras3)s or locatie=%(oras4)s or locatie=%(oras5)s or locatie=%(oras6)s) and (nivel_master=%(dific1)s or nivel_master=%(dific2)s or nivel_master=%(dific3)s or nivel_master=%(dific4)s) and (format_master=%(format1)s or format_master=%(format2)s)", {'domeniu': domeniu, 'aspecte1': listaspecte[0],'aspecte2': listaspecte[1], 'aspecte3': listaspecte[2],'aspecte4': listaspecte[3], 'aspecte5': listaspecte[4],'aspecte6': listaspecte[5], 'aspecte7': listaspecte[6],'aspecte8': listaspecte[7], 'aspecte9': listaspecte[8],'aspecte10': listaspecte[9], 'oras1':listorase[0], 'oras2':listorase[1], 'oras3':listorase[2], 'oras4':listorase[3], 'oras5':listorase[4], 'oras6':listorase[5], 'dific1':listdif[0], 'dific2':listdif[1], 'dific3':listdif[2],'dific4':listdif[3],'format1':listformat[0],'format2':listformat[1]})
+        crsr.execute("SELECT distinct facName,univName,locatie,encode(facimg, 'base64') as imagine,nivel_master,aspecte_domeniu_master,format_master FROM Facs where domeniu~%(domeniu)s and (aspecte_domeniu_master~%(aspecte1)s or aspecte_domeniu_master~%(aspecte2)s or aspecte_domeniu_master~%(aspecte3)s or aspecte_domeniu_master~%(aspecte4)s or aspecte_domeniu_master~%(aspecte5)s or aspecte_domeniu_master~%(aspecte6)s or aspecte_domeniu_master~%(aspecte7)s or aspecte_domeniu_master~%(aspecte8)s or aspecte_domeniu_master~%(aspecte9)s or aspecte_domeniu_master~%(aspecte10)s) and (locatie=%(oras1)s or locatie=%(oras2)s or locatie=%(oras3)s or locatie=%(oras4)s or locatie=%(oras5)s or locatie=%(oras6)s) and (nivel_master=%(dific1)s or nivel_master=%(dific2)s or nivel_master=%(dific3)s or nivel_master=%(dific4)s) and (format_master=%(format1)s or format_master=%(format2)s)", {'domeniu': domeniu, 'aspecte1': listaspecte[0],'aspecte2': listaspecte[1], 'aspecte3': listaspecte[2],'aspecte4': listaspecte[3], 'aspecte5': listaspecte[4],'aspecte6': listaspecte[5], 'aspecte7': listaspecte[6],'aspecte8': listaspecte[7], 'aspecte9': listaspecte[8],'aspecte10': listaspecte[9], 'oras1':listorase[0], 'oras2':listorase[1], 'oras3':listorase[2], 'oras4':listorase[3], 'oras5':listorase[4], 'oras6':listorase[5], 'dific1':listdif[0], 'dific2':listdif[1], 'dific3':listdif[2],'dific4':listdif[3],'format1':listformat[0],'format2':listformat[1]})
         date_fac_student = crsr.fetchall()
         #print(date_fac_student)
 
@@ -177,9 +242,9 @@ def form_student():
             list_facs= json.loads(date_json)
             ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5],x[6]) for x in list_facs]
             for x in list_facs:
-                image_bytes = bytes(x[6], encoding='utf-8')
+                image_bytes = bytes(x[3], encoding='utf-8')
                 decoded_image = base64.b64encode(image_bytes).decode('utf-8')
-                x[6] = decoded_image
+                x[3] = decoded_image
 
             user_type = 'student'
             user_id = session['userid']
@@ -192,6 +257,40 @@ def form_student():
             return redirect(url_for('favs'))
 
     return render_template('form_student.html',username=session['user'])
+
+
+from flask import request, jsonify, session
+
+@app.route('/add_to_favorites', methods=['POST'])
+def add_to_favorites():
+    # Get the index from the request JSON data
+    index = int(request.json.get('index'))
+
+    # Check if the index is valid
+    if index is None:
+        return jsonify(message='Invalid index.'), 400
+
+    # Get the selected panel data from the "univs" page
+    selected_panel = session['ready_list_facs_prof_cons'][index]
+
+    # Get the user type and user ID from the session
+    user_type = session.get('tip')
+    user_id = session.get('userid')
+
+    # Check if user type and user ID are present in the session
+    if not user_type or not user_id:
+        return jsonify(message='User not authenticated.'), 401
+
+    # Check the user type and update the session accordingly
+    if user_type == 'student':
+        session.setdefault('student', {}).setdefault(user_id, []).append(selected_panel)
+    elif user_type == 'elev':
+        session.setdefault('elev', {}).setdefault(user_id, []).append(selected_panel)
+    else:
+        return jsonify(message='Invalid user type.'), 400
+
+    return jsonify(message='Panel added to favorites successfully.'), 200
+
 
 @app.route('/remove_panel', methods=['POST'])
 def remove_panel():
@@ -340,6 +439,9 @@ def login():
         password = request.form.get('password')
         print(username)
         print(password)
+        if username == 'Admin' and password == 'admin':
+            session['user'] = username
+            return redirect(url_for('admin_home'))
         conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
         crsr = conn.cursor()
         crsr.execute("select username,passwd from Users where username=%(username)s and passwd=%(passwd)s", {'username': username, 'passwd': password})

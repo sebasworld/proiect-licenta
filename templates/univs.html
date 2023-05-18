@@ -76,7 +76,8 @@
   <div class="search-panel">
     <input type="text" id="searchInput" placeholder="Căutați o facultate...">
   </div>
-  {% if date_fac_prof_consi %}      
+  {% if date_fac_prof_consi %}
+    {% if usertype == 'elev' or usertype == 'profesor' or usertype == 'consilier cariera' %}     
       {% for i in range(len_list_prof_cons) %}
       <div class="panel panel-collapsed">
         <div class="panel-toggle">
@@ -86,12 +87,12 @@
           <div class="grid-container">
             <div class="grid-item">
               <br><br>
-              <p style="font-size: 20px;"><b>{{ ready_list_facs_prof_cons[i][1] }}</b></p>
-              <p style="font-size: 20px;"><b>{{ ready_list_facs_prof_cons[i][0] }}, {{ ready_list_facs_prof_cons[i][2] }}</b></p>
+              <p style="font-size: 20px;"><b>{{ ready_list_facs_prof_cons[i][0] }}</b></p>
+              <p style="font-size: 20px;"><b>{{ ready_list_facs_prof_cons[i][1] }}, {{ ready_list_facs_prof_cons[i][2] }}</b></p>
               <p style="font-size: 20px;"><b>Mod învățământ: {{ ready_list_facs_prof_cons[i][5] }}</b></p>
             </div>
             <div class="grid-item">
-              <img src="data:image/png;base64,{{ ready_list_facs_prof_cons[i][12] }}" alt="Image" width="200">
+              <img src="data:image/png;base64,{{ ready_list_facs_prof_cons[i][9] }}" alt="Image" width="200">
             </div>
           </div>
         </div>      
@@ -108,17 +109,51 @@
           <p><b>Ultima medie de intrare din cadrul ultimei sesiuni de admitere: </b>{{ ready_list_facs_prof_cons[i][6] }}, la {{ ready_list_facs_prof_cons[i][5] }}</p>
         </div>
         <div class="column">
-          <p><b>Dificultate programe master (medie): </b>{{ ready_list_facs_prof_cons[i][9] }}/5</p>
+          <p><b>Dificultate programe master (medie): </b>{{ ready_list_facs_prof_cons[i][10] }}/5</p>
         </div>
         <div class="column">
-          <p><b>Aspecte aprofundate în cadrul programelor de masterat: </b>{{ ready_list_facs_prof_cons[i][10] }}</p>
+          <p><b>Aspecte aprofundate în cadrul programelor de masterat: </b>{{ ready_list_facs_prof_cons[i][11] }}</p>
         </div>
         <div class="column">
-          <p><b>Formatul de studiu abordat în cadrul programelor de masterat: </b>{{ ready_list_facs_prof_cons[i][11] }}</p>
+          <p><b>Formatul de studiu abordat în cadrul programelor de masterat: </b>{{ ready_list_facs_prof_cons[i][12] }}</p>
         </div>
       </div>
+      <button class="add-button" data-index="{{ loop.index0 }}" onclick="addToFavorites(event)">Adaugă la Favorite</button>
     </div>
     {% endfor %}
+    {% elif usertype == 'student' %}     
+      {% for i in range(len_list_prof_cons) %}
+      <div class="panel panel-collapsed">
+        <div class="panel-toggle">
+          <span class="arrow">▼</span>
+        </div>
+        <div class="panel-title">
+          <div class="grid-container">
+            <div class="grid-item">
+              <br><br>
+              <p style="font-size: 20px;"><b>{{ ready_list_facs_prof_cons[i][0] }}</b></p>
+              <p style="font-size: 20px;"><b>{{ ready_list_facs_prof_cons[i][1] }}, {{ ready_list_facs_prof_cons[i][2] }}</b></p>
+            </div>
+            <div class="grid-item">
+              <img src="data:image/png;base64,{{ ready_list_facs_prof_cons[i][3] }}" alt="Image" width="200">
+            </div>
+          </div>
+        </div>      
+      <div class="panel-content">
+        <div class="column">
+          <p><b>Dificultate programe master (medie): </b>{{ ready_list_facs_prof_cons[i][4] }}/5</p>
+        </div>
+        <div class="column">
+          <p><b>Aspecte aprofundate în cadrul programelor de masterat: </b>{{ ready_list_facs_prof_cons[i][5] }}</p>
+        </div>
+        <div class="column">
+          <p><b>Formatul de studiu abordat în cadrul programelor de masterat: </b>{{ ready_list_facs_prof_cons[i][6] }}</p>
+        </div>
+      </div>
+      <button class="add-button" data-index="{{ loop.index0 }}" onclick="addToFavorites(event)">Adaugă la Favorite</button>
+    </div>
+    {% endfor %}
+    {% endif %}
   </div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
@@ -127,6 +162,26 @@
         $(this).closest('.panel').toggleClass('panel-expanded panel-collapsed');
       });
     });
+    function addToFavorites(event) {
+      var index = event.target.getAttribute('data-index');
+  
+      // Send AJAX request to the Flask route
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/add_to_favorites');
+      xhr.setRequestHeader('Content-Type', 'application/json');
+  
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          // Panel added successfully
+          alert('Panel added to favorites successfully.');
+        } else {
+          // Error adding panel
+          alert('Error adding panel to favorites.');
+        }
+      };
+  
+      xhr.send(JSON.stringify({ index: index }));
+    }
   </script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>

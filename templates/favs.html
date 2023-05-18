@@ -159,19 +159,19 @@
                   <p style="font-size: 20px;"><b>{{ ready_list_facs_student[i][1] }}, {{ ready_list_facs_student[i][2] }}</b></p>
                 </div>
                 <div class="grid-item">
-                  <img src="data:image/png;base64,{{ ready_list_facs_student[i][6] }}" alt="Image" width="200">
+                  <img src="data:image/png;base64,{{ ready_list_facs_student[i][3] }}" alt="Image" width="200">
                 </div>
               </div>
             </div>      
             <div class="panel-content">
               <div class="column">
-                <p><b>Dificultate programe master (medie): </b>{{ ready_list_facs_student[i][3] }}/5</p>
+                <p><b>Dificultate programe master (medie): </b>{{ ready_list_facs_student[i][4] }}/5</p>
               </div>
               <div class="column">
-                <p><b>Aspecte aprofundate în cadrul programelor de masterat: </b>{{ ready_list_facs_student[i][4] }}</p>
+                <p><b>Aspecte aprofundate în cadrul programelor de masterat: </b>{{ ready_list_facs_student[i][5] }}</p>
               </div>
               <div class="column">
-                <p><b>Formatul de studiu abordat în cadrul programelor de masterat: </b>{{ ready_list_facs_student[i][5] }}</p>
+                <p><b>Formatul de studiu abordat în cadrul programelor de masterat: </b>{{ ready_list_facs_student[i][6] }}</p>
               </div>
             </div>
             <button class="delete-button" data-user-type="{{ usertype }}" data-index="{{ loop.index0 }}" onclick="removePanel(event)">Șterge din Favorite</button>
