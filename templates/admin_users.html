@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <link
+  rel="stylesheet"
+  href="/static/admin_users.css"
+  />
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css"
+  integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp"
+  crossorigin="anonymous"
+  />
+  <script 
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" 
+  crossorigin="anonymous">
+  </script>
+  <style>
+    a:link {
+      color: green;
+      background-color: transparent;
+      text-decoration: none;
+    }
+    
+    a:visited {
+      color: pink;
+      background-color: transparent;
+      text-decoration: none;
+    }
+    
+    a:hover {
+      color: red;
+      background-color: transparent;
+      text-decoration: underline;
+    }
+    
+    a:active {
+      color: yellow;
+      background-color: transparent;
+      text-decoration: underline;
+    }
+    </style>
+<head>  
+    <title>Utilizatori Admin</title>
+</head>
+
+<body>
+    <div class="topnav">
+      <a href="{{url_for('admin_home')}}">Acasă</a>
+      <a class="active" href="{{url_for('admin_users')}}">Gestionare utilizatori</a>
+      <a href="{{url_for('admin_univs')}}">Gestionare facultăți</a>
+      <a class="right" href="{{url_for('logout')}}">Delogare ({{ username }})</a>
+    </div>
+</body>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% if category == 'error'%}
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        {{ message }}
+                        
+                    </div>
+                {% else %}
+                    <div class="alert alert-success alert-dismissible fade show">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %} 
+
+    <div style="position:relative;margin:20px">
+      <div class="search-panel">
+        <input type="text" id="searchInput" placeholder="Căutați un utilizator...">
+      </div>
+      {% if date_user %}
+        {% for user in ready_list_users %}
+        <div class="panel">
+          <div class="panel-content">
+            <div class="column">
+              <p><b>ID Utilizator: </b>{{ user[2] }}</p>
+              <p><b>Nume utilizator: </b>{{ user[0] }}</p>
+              <p><b>Tip utilizator: </b>{{ user[1] }}</p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% if pagination %}
+        <div class="pagination-container">
+          <div class="pagination">
+            {{ pagination.links }}
+          </div>
+        </div>
+        {% endif %}
+      {% endif %}
+    </div>
+    
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // Filter panels based on search input
+    $('#searchInput').on('input', function() {
+      var searchValue = $(this).val().toLowerCase();
+      $('.panel').each(function() {
+        var panelText = $(this).text().toLowerCase();
+        if (panelText.indexOf(searchValue) > -1) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+    });
+  });
+</script>
+</html>

@@ -53,16 +53,35 @@
     </div>
 </body>
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% if category == 'error'%}
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        {{ message }}
+                        
+                    </div>
+                {% else %}
+                    <div class="alert alert-success alert-dismissible fade show">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %} 
+
 <div style="position:relative;margin:20px">
   <div class="search-panel">
     <input type="text" id="searchInput" placeholder="Căutați o facultate...">
   </div>
   <div class="buttons-container1">
-    <button class="adauga-button" onclick="adauga">Adaugă o facultate...</button>
+    <button class="adauga-button" onclick='redirectfac()'>Adaugă o facultate...</button>
   </div>
   {% if date_fac: %}   
       {% for i in range(len_list) %}
-      <div class="panel panel-collapsed">
+      <div class="panel panel-collapsed" data-faculty-id="{{ ready_list_facs[i][13] }}">
         <div class="panel-toggle">
           <span class="arrow">▼</span>
         </div>
@@ -79,8 +98,8 @@
             </div>
             <div class="grid-item">
                 <div class="buttons-container">
-                  <button class="delete-button" onclick="deletePanel">Șterge</button>
-                  <button class="modify-button" onclick="modifyPanel">Modifică</button>
+                  <button class="delete-button" onclick="deleteFaculty(this)">Șterge</button>
+                  <button class="modify-button" onclick="modifyPanel(this)">Modifică</button>
                 </div>
             </div>
           </div>
@@ -106,6 +125,58 @@
         <div class="column">
           <p><b>Formatul de studiu abordat în cadrul programelor de masterat: </b>{{ ready_list_facs[i][12] }}</p>
         </div>
+        <br><br><br>
+        <div class="modify-panel">
+          <p style="font-size: 30px;"><b>Modificați datele facultății:</b></p><br><br>
+
+          <form id="modifyForm" action="/modify_fac" method="POST">
+
+          <p><b>Numele facultății: </b>
+          <input type="text" name="facName" placeholder="Nume facultate" required><br><br>
+  
+          <p><b>Numele universității din care face parte facultatea: </b>
+          <input type="text" name="univName" placeholder="Nume universitate" required><br><br>
+  
+          <p><b>Orașul în care se află facultatea: </b>
+          <input type="text" name="locatie" placeholder="Locație" required><br><br>
+  
+          <p><b>Rating-ul nivelului academic de pregătire: </b>
+          <input type="text" name="rating" placeholder="Rating" required><br><br>
+  
+          <p><b>Durată pregătire licență: </b>
+          <input type="text" name="licenta" placeholder="Durată licență" required><br><br>
+  
+          <p><b>Programe de studiu disponibile în cadrul facultății: </b>
+          <input type="text" name="programeStud" placeholder="Programe studiu" required><br><br>
+
+          <p><b>Formatul de studiu în privința plății: </b>
+          <input type="text" name="taxa" placeholder="Taxă/Buget" required><br><br>
+  
+          <p><b>Ultima medie de intrare din cadrul ultimei sesiuni de admitere: </b>
+          <input type="text" name="medie" placeholder="Ultima medie de intrare" required><br><br>
+  
+          <p><b>Tipul de admitere la facultate: </b>
+          <input type="text" name="admitere" placeholder="Tipul de admitere" required><br><br>
+
+          <p><b>Profilul elevului cel mai potrivit: </b>
+          <input type="text" name="profil" placeholder="Profil liceu" required><br><br>
+
+          <p><b>Domeniile de studiu în cadrul pregătirii academice: </b>
+          <input type="text" name="domeniu" placeholder="Domenii de studiu (maxim 2)" required><br><br>
+
+          <p><b>Dificultate programe master (medie):
+          <input type="text" name="dific" placeholder="Dificultate masterat" required><br><br>
+
+          p><b>Aspecte aprofundate în cadrul programelor de masterat: </b>
+          <input type="text" name="aspecte" placeholder="Aspecte masterat" required><br><br>
+
+          <p><b>Formatul de studiu abordat în cadrul programelor de masterat: </b>
+          <input type="text" name="format" placeholder="Format masterat" required><br><br>
+
+          <button class="submit-modif" onclick="submitForm()">Submit date noi</button>
+
+        </form>
+        </div>
       </div>
     </div>
     {% endfor %}
@@ -117,6 +188,7 @@
         $(this).closest('.panel').toggleClass('panel-expanded panel-collapsed');
       });
     });
+
   </script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -136,4 +208,74 @@
   });
 </script>
 {% endif %}
+<script>
+  function redirectfac() {
+    window.location.replace("/add_fac");
+  }
+  function deleteFaculty(button) {
+    const facultyPanel = button.closest('.panel');
+    const facultyId = facultyPanel.dataset.facultyId;
+  
+    // Send an AJAX request to the delete route with the faculty ID
+    fetch('/delete_fac', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `facultyId=${encodeURIComponent(facultyId)}`,
+    })
+      .then(response => {
+        if (response.ok) {
+          // Faculty deleted successfully
+          console.log('Faculty deleted successfully');
+          location.reload();
+        } else {
+          // Error deleting faculty
+          console.error('Error deleting faculty');
+        }
+      })
+      .catch(error => {
+        // Handle network errors or other exceptions
+        console.error('An error occurred:', error);
+      });
+  }    
+
+  function modifyPanel(button) {
+    var panel = button.closest('.panel');
+    var modifyPanel = panel.querySelector('.modify-panel');
+    modifyPanel.style.display = 'block'; // Show the modify panel
+  
+    // You can perform additional actions here, such as pre-populating the input fields with existing data or applying any necessary event listeners.
+  }
+
+  function submitForm() {
+    var form = document.getElementById("modifyForm");
+    var formData = new FormData(form);
+    var facultyPanel = document.querySelector('.panel.panel-collapsed:not(.panel-modify)');
+    var facultyId = facultyPanel.getAttribute('data-faculty-id');
+  
+    formData.append('facultyId', facultyId);
+  
+    fetch('/modify_fac', {
+      method: 'POST',
+      body: formData
+    })
+      .then(response => {
+        if (response.ok) {
+          // Faculty modified successfully
+          console.log('Faculty modified successfully');
+          location.reload();
+        } else {
+          // Error modifying faculty
+          console.error('Error modifying faculty');
+        }
+      })
+      .catch(error => {
+        // Handle network errors or other exceptions
+        console.error('An error occurred:', error);
+      });
+  }  
+  
+
+</script>
 </html>

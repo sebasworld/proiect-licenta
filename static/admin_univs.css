@@ -204,3 +204,22 @@ body {
         background-color: darkgreen;
       }
       
+      .modify-panel {
+        display: none; /* Hide the modify panel by default */
+      }
+
+      button.submit-modif {
+        color: white;
+        font-family: cursive;
+        background-color: blue;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+      
+      button.submit-modif:hover {
+        background-color: darkblue;
+      }
+      

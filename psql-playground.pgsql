@@ -75,7 +75,7 @@ create table infoFacs(
 SELECT * FROM Users WHERE 1 = 1;
 
 create table Facs(
-	facid int NOT NULL,
+	facid SERIAL PRIMARY KEY,
 	facName varchar(100) NOT NULL,
 	univName varchar(100) NOT NULL,
 	locatie varchar(100) NOT NULL,
@@ -89,15 +89,12 @@ create table Facs(
 	programestudiu varchar(100) NOT NULL,
 	nivel_master varchar(100) NOT NULL,
 	aspecte_domeniu_master varchar(100) NOT NULL,
-	format_master varchar(100) NOT NULL,
-	primary key(facid),
-    unique(facid)
+	format_master varchar(100) NOT NULL
 );
 
 drop table Facs;
 
 insert into Facs(
-	facid,
 	facName,
 	univName,
 	locatie,
@@ -114,7 +111,6 @@ insert into Facs(
 	format_master
 	)
 VALUES(
-	1,
  	'Facultatea de Automatică și Calculatoare - Ingineria Sistemelor',
 	'Universitatea Politehnica din București',
 	'București',
@@ -132,7 +128,6 @@ VALUES(
 );
 
 insert into Facs(
-	facid,
 	facName,
 	univName,
 	locatie,
@@ -148,7 +143,7 @@ insert into Facs(
 	aspecte_domeniu_master,
 	format_master
 )
-VALUES(2,
+VALUES(
 	'Facultatea de Automatică și Calculatoare - Ingineria Sistemelor',
 	'Universitatea Politehnica din București',
 	'București',
@@ -166,7 +161,6 @@ VALUES(2,
  );
 
 insert into Facs(
-	facid,
 	facName,
 	univName,
 	locatie,
@@ -182,7 +176,7 @@ insert into Facs(
 	aspecte_domeniu_master,
 	format_master
 )
-VALUES(3,
+VALUES(
  	'Facultatea de Automatică și Calculatoare - Calculatoare și Tehnologia Informației',
   	'Universitatea Politehnica din București',
 	'București',
@@ -200,7 +194,6 @@ VALUES(3,
 );
 
 insert into Facs(
-	facid,
 	facName,
 	univName,
 	locatie,
@@ -216,7 +209,7 @@ insert into Facs(
 	aspecte_domeniu_master,
 	format_master
 )
-VALUES(4,
+VALUES(
  	'Facultatea de Automatică și Calculatoare - Calculatoare și Tehnologia Informației',
   	'Universitatea Politehnica din București',
 	'București',
@@ -242,13 +235,13 @@ ADD COLUMN facimg bytea;
 
 select * from Facs;
 SELECT * FROM Facs WHERE 1 = 1 and domeniu ~ 'Inginerie'
-select tip from Users where username='Salut' and passwd='salut123'
-select * from Users
-
+delete *  from Users where username='Salut' and passwd='salut123'
+select distinct username, tip, passwd from Users;
+select * from Users;
 SELECT distinct univName,facName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu,nivel_master,aspecte_domeniu_master,format_master FROM Facs
 SELECT distinct facName,univName FROM Facs where profilelev='Matematică-Informatică'
 
-delete all from Facs where facid=1;
+delete from Facs where facid=5;
 create table DomeniiPoliBuc(
 	domid int NOT NULL,
 	numeDomeniu varchar(50) NOT NULL,
@@ -261,7 +254,7 @@ create table DomeniiPoliBuc(
 
 select * from DomeniiPoliBuc;
 
-drop table Domenii;
+drop table Facs;
 
 insert into DomeniiPoliBuc(domid,numedomeniu,licenta,master,doctorat)
 VALUES(1, 'Inginerie','da','da','da');

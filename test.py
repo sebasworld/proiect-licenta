@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, request, flash, session, redirect
 from flask_session import Session
+from flask_paginate import Pagination, get_page_parameter
 from redis import Redis
 from datetime import timedelta
 import psycopg2
@@ -26,13 +27,113 @@ def home():
 def admin_home():
     return render_template('admin_home.html', username = session['user'])
 
+@app.route('/add_fac', methods=['post', 'get'])
+def add_fac():
+    if request.method == 'POST':
+        facName = request.form['facName']
+        univName = request.form['univName']
+        locatie = request.form['locatie']
+        rating = request.form['rating']
+        licenta = request.form['licenta']
+        programeStud = request.form['programeStud']
+        taxa = request.form['taxa']
+        medie = request.form['medie']
+        admitere = request.form['admitere']
+        profil = request.form['profil']
+        domeniu = request.form['domeniu']
+        dific = request.form['dific']
+        aspecte = request.form['aspecte']
+        format1 = request.form['format']
+
+        conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
+        cursor = conn.cursor()
+        
+        image_file = request.files['facultyPhoto']
+        img_data = image_file.read()
+
+        try:
+            cursor.execute("INSERT INTO Facs (facName, univName, locatie, rating, durataLicenta, taxa, ultimaMedie, tipAdmitere, profilelev, domeniu, programestudiu,nivel_master, aspecte_domeniu_master, format_master,facimg) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (facName,univName, locatie,rating, licenta ,taxa,medie,admitere,profil,domeniu,programeStud,dific, aspecte,format1,psycopg2.Binary(img_data)))
+            conn.commit()
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+            conn.rollback()
+        finally:
+            conn.close()
+
+        flash('Facultate adăugată cu succes!', category='success')
+        return redirect(url_for('admin_univs'))
+    return render_template('add_fac.html')
+
+@app.route('/delete_fac', methods=['POST'])
+def delete_fac():
+    faculty_id = request.form['facultyId']
+
+    conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("DELETE FROM Facs WHERE facid = %s", (faculty_id,))
+        conn.commit()
+        flash('Facultate ștearsă cu succes!', category='success')
+        return "Faculty deleted successfully", 200
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        conn.rollback()
+        flash('Facultate nu a fost ștearsă!', category='error')
+        return "Error deleting faculty", 500
+    finally:
+        conn.close()
+
+@app.route('/modify_fac', methods=['POST', 'GET'])
+def modify_fac():
+    if request.method == 'POST':   
+        faculty_id = request.form.get('facultyId')
+        facName = request.form.get('facName')
+        univName = request.form.get('univName')
+        locatie = request.form.get('locatie')
+        rating = request.form.get('rating')
+        licenta = request.form.get('licenta')
+        programeStud = request.form.get('programeStud')
+        taxa = request.form.get('taxa')
+        medie = request.form.get('medie')
+        admitere = request.form.get('admitere')
+        profil = request.form.get('profil')
+        domeniu = request.form.get('domeniu')
+        dific = request.form.get('dific')
+        aspecte = request.form.get('aspecte')
+        format1 = request.form.get('format')
+        print(faculty_id)
+        print(facName)
+        print(dific)
+
+        conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
+        cursor = conn.cursor()
+        try:
+            cursor.execute("""
+                UPDATE Facs
+                SET facName = %s, univName = %s, locatie = %s,rating = %s,durataLicenta = %s,taxa = %s,ultimaMedie = %s,tipAdmitere = %s,
+                profilelev = %s,domeniu = %s,programestudiu = %s,nivel_master = %s,aspecte_domeniu_master = %s,format_master = %s
+                WHERE facid = %s
+            """, (facName, univName, locatie,rating,licenta,taxa,medie,admitere,profil,domeniu, programeStud,dific,aspecte,format1,faculty_id))
+            conn.commit()
+            flash('Facultate modificată cu succes!', category='success')
+            return redirect('/admin_univs') 
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+            conn.rollback()
+            flash('Eroare la modificarea facultății!', category='error')
+            return redirect('/admin_univs')
+        finally:
+            conn.close()
+    return render_template('admin_univs')
+
 @app.route('/admin_univs', methods=['post', 'get'])
 def admin_univs():
     if request.method == 'GET':
         conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
         crsr = conn.cursor()
 
-        crsr.execute("SELECT distinct facName, univName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu,encode(facimg, 'base64') as imagine, nivel_master,aspecte_domeniu_master,format_master FROM Facs")
+        crsr.execute("SELECT distinct facName, univName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu,encode(facimg, 'base64') as imagine, nivel_master,aspecte_domeniu_master,format_master,facid FROM Facs")
         date_fac = crsr.fetchall()
 
         if not date_fac:
@@ -41,7 +142,7 @@ def admin_univs():
         else:
             date_json = json.dumps(date_fac)
             list_facs= json.loads(date_json)
-            ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5], x[6],x[7],x[8],x[9],x[10],x[11],x[12]) for x in list_facs]
+            ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5], x[6],x[7],x[8],x[9],x[10],x[11],x[12], x[13]) for x in list_facs]
             for x in list_facs:
                 image_bytes = bytes(x[9], encoding='utf-8')
                 decoded_image = base64.b64encode(image_bytes).decode('utf-8')
@@ -56,6 +157,35 @@ def admin_univs():
 
 @app.route('/admin_users', methods=['post', 'get'])
 def admin_users():
+    if request.method == 'GET':
+        conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
+        crsr = conn.cursor()
+
+        crsr.execute("select distinct username, tip, userid from Users")
+        date_user = crsr.fetchall()
+
+        if not date_user:
+            flash('Nu s-au putut accesa datele utilizatorilor!', category='error')
+            return render_template('admin_users.html',date_fac=date_user,username=session['user'])
+        else:
+            date_json = json.dumps(date_user)
+            list_users= json.loads(date_json)
+            ready_list_users = [(x[0], x[1], x[2]) for x in list_users]
+
+            # Paginate the user list
+            page = request.args.get(get_page_parameter(), type=int, default=1)
+            per_page = 7
+            start = (page - 1) * per_page
+            end = start + per_page
+            users_to_display = ready_list_users[start:end]
+
+            # Create pagination object
+            pagination = Pagination(page=page, total=len(ready_list_users), per_page=per_page)
+
+            session['ready_list_users'] = ready_list_users
+            len_list = len(ready_list_users)
+            conn.close()
+            return render_template('admin_users.html', date_user=date_user, len_list=len_list, ready_list_users=users_to_display, pagination = pagination, username=session['user'])
     return render_template('admin_users.html', username = session['user'])
 
 @app.route('/home', methods=['post', 'get'])

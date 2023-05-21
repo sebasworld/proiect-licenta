@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+  <link
+  rel="stylesheet"
+  href="/static/add_fac.css"
+  />
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css"
+  integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp"
+  crossorigin="anonymous"
+  />
+  <script 
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" 
+  crossorigin="anonymous">
+  </script>
+  <head>  
+    <title>Adăugare facultate</title>
+  </head>
+
+  <div id="container_2">
+    <label id="description-label">Mai jos sunt toate informațiile necesare pentru adăugarea unei noi facultăți.</label><br>
+    <label id="description-label1">Completați câmpurile și apoi apăsați pe butonul Submit!</label><br><br>
+    <form id="faculty-form" action="/add_fac" method="POST" enctype="multipart/form-data">
+        <label id="facName-label">Introduceți numele facultății (și departamentul, daca există):</label><br>
+        <input type="text" name="facName" placeholder="Nume facultate" required><br>
+
+        <label id="univName-label">Introduceți numele universității:</label><br>
+        <input type="text" name="univName" placeholder="Nume universitate" required><br>
+
+        <label id="locatie-label">Introduceți orașul în care se află facultatea:</label><br>
+        <input type="text" name="locatie" placeholder="Locație" required><br>
+
+        <label id="rating-label">Introduceți rating-ul mulțumirii studenților:</label><br>
+        <input type="text" name="rating" placeholder="Rating" required><br>
+
+        <label id="licentaDur-label">Introduceți durata licenței:</label><br>
+        <input type="text" name="licenta" placeholder="Durată licență" required><br>
+
+        <label id="programeStud-label">Introduceți programele de studiu disponibile (cu , între ele):</label><br>
+        <input type="text" name="programeStud" placeholder="Programe studiu" required><br>
+
+        <label id="taxa-label">Alegeți încadrarea programului de studiu licență:</label><br>
+            <select id="taxa" name="taxa" required>
+                <option disabled selected value>
+                Alege o opțiune
+                </option>
+                <option value="Taxă">
+                Taxă
+                </option>
+                <option value="Buget">
+                Buget
+                </option>
+            </select> <br>
+        
+        <label id="ultimaMed-label">Introduceți ultima medie de admitere la licență:</label><br>
+        <input type="text" name="medie" placeholder="Ultima medie de intrare" required><br>
+
+        <label id="admitere-label">Introduceți tipul de admitere folosit la facultate:</label><br>
+            <select id="admitere" name="admitere" required>
+                <option disabled selected value>
+                    Alege o opțiune
+                </option>
+                <option value="Examen de admitere">
+                    Examen de admitere
+                </option>
+                <option value="Pe bază de dosar">
+                    Pe bază de dosar
+                </option>
+            </select> <br>
+        
+        <label id="profil-label">Ce profil din liceu se potrivește facultății:</label><br>
+            <select id="profil" name="profil" required>
+                <option disabled selected value>
+                Alege o opțiune
+                </option>
+                <option value="Matematică-Informatică">
+                Matematică-Informatică
+                </option>
+                <option value="Filologie">
+                Filologie
+                </option>
+                <option value="Științele naturii">
+                Științele naturii
+                </option>
+            </select> <br>
+
+        <label id="domeniu-label">Ce domenii de studiu cuprinde facultatea (maximum 2):</label><br>
+            <select id="domeniu" name="domeniu" multiple required >
+                <option disabled selected value>
+                Alege din opțiuni
+                </option>
+                <option value="Inginerie">
+                Inginerie
+                </option>
+                <option value="Știință & Tehnologie">
+                Știință & Tehnologie
+                </option>
+                <option value="Arte & Umanism">
+                Arte & Umanism
+                </option>
+                <option value="Afaceri & Științe Sociale">
+                Afaceri & Științe Sociale
+                </option>
+                <option value="Lingvistică & Cultură">
+                Lingvistică & Cultură
+                </option>
+                <option value="Medicină & Sănătate">
+                Medicină & Sănătate
+                </option>
+            </select> <br>
+
+        <label id="dificMaster-label">Introduceți media de dificultate a programelor de masterat (1-5):</label><br>
+        <input type="text" name="dific" placeholder="Dificultate masterat" required> <br>
+
+        <label id="aspecte-label">Ce aspecte ale domeniului de studiu cuprind programele de masterat (maximum 2):</label><br>
+            <select id="aspecte" name="aspecte" multiple required>
+                <option disabled selected value>
+                 Alege din opțiuni
+                </option>
+                <option value="Inovație și Cercetare">
+                 Inovație și Cercetare
+                </option>
+                <option value="Dezvoltarea abilităților practice">
+                 Dezvoltarea abilităților practice
+                </option>
+                <option value="Contribuția socială">
+                    Contribuția socială
+                </option>
+                <option value="Creativitate și exprimare artistică">
+                    Creativitate și exprimare artistică
+                </option>
+                <option value="Abordarea interdisciplinară">
+                    Abordarea interdisciplinară
+                </option>
+                <option value="Dezvoltarea personală și profesională">
+                    Dezvoltarea personală și profesională
+                </option>
+                <option value="Colaborarea și comunicarea">
+                    Colaborarea și comunicarea
+                </option>
+                <option value="Leadership și management">
+                    Leadership și management
+                </option>
+                <option value="Impactul economic și antreprenoriatul">
+                    Impactul economic și antreprenoriatul
+                </option>
+                <option value="Sustenabilitatea și responsabilitate socială">
+                    Sustenabilitatea și responsabilitate socială
+                </option>
+             </select> <br>
+        <label id="format-label">Care este formatul de studiu la programele de masterat: </label><br>
+            <select id="format" name="format" required>
+                <option disabled selected value>
+                    Alege o opțiune
+                </option>
+                <option value="Hybrid">
+                    Hybrid
+                </option>
+                <option value="Fizic">
+                    Fizic
+                </option>
+            </select> <br>
+
+        <label id="image-label">Alegeți logo-ul facultății: </label><br>   
+        <input type="file" name="facultyPhoto" accept="image/*" required>
+
+      <input type="submit" id="submit" name="submit" value="Submit">
+    </form>
+    <script>
+        const selectElement = document.getElementById('domeniu');
+        selectElement.addEventListener('change', (event) => {
+        const selectedOptions = Array.from(event.target.selectedOptions);
+        if (selectedOptions.length > 2) {
+            selectedOptions.forEach((option) => {
+            if (!option.selected) {
+                option.disabled = true;
+            }
+            });
+        } else {
+            const allOptions = Array.from(event.target.options);
+            allOptions.forEach((option) => {
+            option.disabled = false;
+            });
+        }
+        });
+        const selectElement1 = document.getElementById('aspecte');
+        selectElement1.addEventListener('change', (event1) => {
+            const selectedOptions1 = Array.from(event1.target.selectedOptions1);
+            if (selectedOptions1.length > 2) {
+            selectedOptions1.forEach((option1) => {
+                if (!option1.selected) {
+                option1.disabled = true;
+                }
+            });
+            } else {
+            const allOptions1 = Array.from(event1.target.options1);
+            allOptions1.forEach((option1) => {
+                option1.disabled = false;
+            });
+            }
+        });
+    </script>
+  </div>
+</html>
