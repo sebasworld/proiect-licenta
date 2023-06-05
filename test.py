@@ -44,6 +44,7 @@ def add_fac():
         dific = request.form['dific']
         aspecte = request.form['aspecte']
         format1 = request.form['format']
+        link_fac = request.form['linkfac']
 
         conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
         cursor = conn.cursor()
@@ -52,7 +53,7 @@ def add_fac():
         img_data = image_file.read()
 
         try:
-            cursor.execute("INSERT INTO Facs (facName, univName, locatie, rating, durataLicenta, taxa, ultimaMedie, tipAdmitere, profilelev, domeniu, programestudiu,nivel_master, aspecte_domeniu_master, format_master,facimg) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (facName,univName, locatie,rating, licenta ,taxa,medie,admitere,profil,domeniu,programeStud,dific, aspecte,format1,psycopg2.Binary(img_data)))
+            cursor.execute("INSERT INTO Facs (facName, univName, locatie, rating, durataLicenta, taxa, ultimaMedie, tipAdmitere, profilelev, domeniu, programestudiu,nivel_master, aspecte_domeniu_master, format_master,facimg,fac_link) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s)", (facName,univName, locatie,rating, licenta ,taxa,medie,admitere,profil,domeniu,programeStud,dific, aspecte,format1,psycopg2.Binary(img_data), link_fac))
             conn.commit()
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
@@ -133,7 +134,7 @@ def admin_univs():
         conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
         crsr = conn.cursor()
 
-        crsr.execute("SELECT distinct facName, univName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu,encode(facimg, 'base64') as imagine, nivel_master,aspecte_domeniu_master,format_master,facid FROM Facs")
+        crsr.execute("SELECT distinct facName, univName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu,encode(facimg, 'base64') as imagine, nivel_master,aspecte_domeniu_master,format_master,facid, fac_link FROM Facs")
         date_fac = crsr.fetchall()
 
         if not date_fac:
@@ -142,7 +143,7 @@ def admin_univs():
         else:
             date_json = json.dumps(date_fac)
             list_facs= json.loads(date_json)
-            ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5], x[6],x[7],x[8],x[9],x[10],x[11],x[12], x[13]) for x in list_facs]
+            ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5], x[6],x[7],x[8],x[9],x[10],x[11],x[12], x[13], x[14]) for x in list_facs]
             for x in list_facs:
                 image_bytes = bytes(x[9], encoding='utf-8')
                 decoded_image = base64.b64encode(image_bytes).decode('utf-8')
@@ -201,7 +202,7 @@ def univs():
             conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
             crsr = conn.cursor()
 
-            crsr.execute("SELECT distinct facName, univName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu,encode(facimg, 'base64') as imagine, nivel_master,aspecte_domeniu_master,format_master FROM Facs")
+            crsr.execute("SELECT distinct facName, univName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu,encode(facimg, 'base64') as imagine, nivel_master,aspecte_domeniu_master,format_master, fac_link FROM Facs")
             date_fac_prof_consi = crsr.fetchall()
             #print(date_fac_prof_consi)
 
@@ -211,7 +212,7 @@ def univs():
             else:
                 date_json = json.dumps(date_fac_prof_consi)
                 list_facs= json.loads(date_json)
-                ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5], x[6],x[7],x[8],x[9],x[10],x[11],x[12]) for x in list_facs]
+                ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5], x[6],x[7],x[8],x[9],x[10],x[11],x[12], x[13]) for x in list_facs]
                 for x in list_facs:
                     image_bytes = bytes(x[9], encoding='utf-8')
                     decoded_image = base64.b64encode(image_bytes).decode('utf-8')
@@ -226,7 +227,7 @@ def univs():
             conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
             crsr = conn.cursor()
 
-            crsr.execute("SELECT distinct facName, univName,locatie,encode(facimg, 'base64') as imagine, nivel_master,aspecte_domeniu_master,format_master FROM Facs")
+            crsr.execute("SELECT distinct facName, univName,locatie,encode(facimg, 'base64') as imagine, nivel_master,aspecte_domeniu_master,format_master, fac_link FROM Facs")
             date_fac_prof_consi = crsr.fetchall()
             #print(date_fac_prof_consi)
 
@@ -236,7 +237,7 @@ def univs():
             else:
                 date_json = json.dumps(date_fac_prof_consi)
                 list_facs= json.loads(date_json)
-                ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5], x[6]) for x in list_facs]
+                ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5], x[6], x[7]) for x in list_facs]
                 for x in list_facs:
                     image_bytes = bytes(x[3], encoding='utf-8')
                     decoded_image = base64.b64encode(image_bytes).decode('utf-8')
@@ -360,7 +361,7 @@ def form_student():
             print('n-a fost selectat nimic la format')
         print(listformat)
 
-        crsr.execute("SELECT distinct facName,univName,locatie,encode(facimg, 'base64') as imagine,nivel_master,aspecte_domeniu_master,format_master FROM Facs where domeniu~%(domeniu)s and (aspecte_domeniu_master~%(aspecte1)s or aspecte_domeniu_master~%(aspecte2)s or aspecte_domeniu_master~%(aspecte3)s or aspecte_domeniu_master~%(aspecte4)s or aspecte_domeniu_master~%(aspecte5)s or aspecte_domeniu_master~%(aspecte6)s or aspecte_domeniu_master~%(aspecte7)s or aspecte_domeniu_master~%(aspecte8)s or aspecte_domeniu_master~%(aspecte9)s or aspecte_domeniu_master~%(aspecte10)s) and (locatie=%(oras1)s or locatie=%(oras2)s or locatie=%(oras3)s or locatie=%(oras4)s or locatie=%(oras5)s or locatie=%(oras6)s) and (nivel_master=%(dific1)s or nivel_master=%(dific2)s or nivel_master=%(dific3)s or nivel_master=%(dific4)s) and (format_master=%(format1)s or format_master=%(format2)s)", {'domeniu': domeniu, 'aspecte1': listaspecte[0],'aspecte2': listaspecte[1], 'aspecte3': listaspecte[2],'aspecte4': listaspecte[3], 'aspecte5': listaspecte[4],'aspecte6': listaspecte[5], 'aspecte7': listaspecte[6],'aspecte8': listaspecte[7], 'aspecte9': listaspecte[8],'aspecte10': listaspecte[9], 'oras1':listorase[0], 'oras2':listorase[1], 'oras3':listorase[2], 'oras4':listorase[3], 'oras5':listorase[4], 'oras6':listorase[5], 'dific1':listdif[0], 'dific2':listdif[1], 'dific3':listdif[2],'dific4':listdif[3],'format1':listformat[0],'format2':listformat[1]})
+        crsr.execute("SELECT distinct facName,univName,locatie,encode(facimg, 'base64') as imagine,nivel_master,aspecte_domeniu_master,format_master, fac_link FROM Facs where domeniu~%(domeniu)s and (aspecte_domeniu_master~%(aspecte1)s or aspecte_domeniu_master~%(aspecte2)s or aspecte_domeniu_master~%(aspecte3)s or aspecte_domeniu_master~%(aspecte4)s or aspecte_domeniu_master~%(aspecte5)s or aspecte_domeniu_master~%(aspecte6)s or aspecte_domeniu_master~%(aspecte7)s or aspecte_domeniu_master~%(aspecte8)s or aspecte_domeniu_master~%(aspecte9)s or aspecte_domeniu_master~%(aspecte10)s) and (locatie=%(oras1)s or locatie=%(oras2)s or locatie=%(oras3)s or locatie=%(oras4)s or locatie=%(oras5)s or locatie=%(oras6)s) and (nivel_master=%(dific1)s or nivel_master=%(dific2)s or nivel_master=%(dific3)s or nivel_master=%(dific4)s) and (format_master=%(format1)s or format_master=%(format2)s)", {'domeniu': domeniu, 'aspecte1': listaspecte[0],'aspecte2': listaspecte[1], 'aspecte3': listaspecte[2],'aspecte4': listaspecte[3], 'aspecte5': listaspecte[4],'aspecte6': listaspecte[5], 'aspecte7': listaspecte[6],'aspecte8': listaspecte[7], 'aspecte9': listaspecte[8],'aspecte10': listaspecte[9], 'oras1':listorase[0], 'oras2':listorase[1], 'oras3':listorase[2], 'oras4':listorase[3], 'oras5':listorase[4], 'oras6':listorase[5], 'dific1':listdif[0], 'dific2':listdif[1], 'dific3':listdif[2],'dific4':listdif[3],'format1':listformat[0],'format2':listformat[1]})
         date_fac_student = crsr.fetchall()
         #print(date_fac_student)
 
@@ -370,7 +371,7 @@ def form_student():
         else:
             date_json = json.dumps(date_fac_student)
             list_facs= json.loads(date_json)
-            ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5],x[6]) for x in list_facs]
+            ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5],x[6], x[7]) for x in list_facs]
             for x in list_facs:
                 image_bytes = bytes(x[3], encoding='utf-8')
                 decoded_image = base64.b64encode(image_bytes).decode('utf-8')
@@ -531,10 +532,10 @@ def form_elev():
         print(listtaxa)
 
         if listtaxa[1] == 'None':
-            crsr.execute("SELECT distinct facName,univName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu,encode(facimg, 'base64') as imagine FROM Facs where profilelev=%(profil)s and taxa=%(taxa)s and (domeniu~%(domeniu1)s or domeniu~%(domeniu2)s or domeniu~%(domeniu3)s or domeniu~%(domeniu4)s or domeniu~%(domeniu5)s or domeniu~%(domeniu6)s) and (locatie=%(oras1)s or locatie=%(oras2)s or locatie=%(oras3)s or locatie=%(oras4)s or locatie=%(oras5)s or locatie=%(oras6)s) and (tipAdmitere=%(admitere1)s or tipAdmitere=%(admitere2)s)", {'profil': profil, 'domeniu1': listdom[0],'domeniu2': listdom[1], 'domeniu3': listdom[2],'domeniu4': listdom[3], 'domeniu5': listdom[4],'domeniu6': listdom[5], 'admitere1': listadm[0], 'admitere2': listadm[1], 'oras1':listorase[0], 'oras2':listorase[1], 'oras3':listorase[2], 'oras4':listorase[3], 'oras5':listorase[4], 'oras6':listorase[5], 'taxa':listtaxa[0]})
+            crsr.execute("SELECT distinct facName,univName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu,encode(facimg, 'base64') as imagine, fac_link FROM Facs where profilelev=%(profil)s and taxa=%(taxa)s and (domeniu~%(domeniu1)s or domeniu~%(domeniu2)s or domeniu~%(domeniu3)s or domeniu~%(domeniu4)s or domeniu~%(domeniu5)s or domeniu~%(domeniu6)s) and (locatie=%(oras1)s or locatie=%(oras2)s or locatie=%(oras3)s or locatie=%(oras4)s or locatie=%(oras5)s or locatie=%(oras6)s) and (tipAdmitere=%(admitere1)s or tipAdmitere=%(admitere2)s)", {'profil': profil, 'domeniu1': listdom[0],'domeniu2': listdom[1], 'domeniu3': listdom[2],'domeniu4': listdom[3], 'domeniu5': listdom[4],'domeniu6': listdom[5], 'admitere1': listadm[0], 'admitere2': listadm[1], 'oras1':listorase[0], 'oras2':listorase[1], 'oras3':listorase[2], 'oras4':listorase[3], 'oras5':listorase[4], 'oras6':listorase[5], 'taxa':listtaxa[0]})
             date_fac = crsr.fetchall()
         else:
-            crsr2.execute("SELECT distinct facName,univName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu,encode(facimg, 'base64') as imagine FROM Facs where profilelev=%(profil)s and (domeniu~%(domeniu1)s or domeniu~%(domeniu2)s or domeniu~%(domeniu3)s or domeniu~%(domeniu4)s or domeniu~%(domeniu5)s or domeniu~%(domeniu6)s) and (locatie=%(oras1)s or locatie=%(oras2)s or locatie=%(oras3)s or locatie=%(oras4)s or locatie=%(oras5)s or locatie=%(oras6)s) and (tipAdmitere=%(admitere1)s or tipAdmitere=%(admitere2)s)", {'profil': profil, 'domeniu1': listdom[0],'domeniu2': listdom[1], 'domeniu3': listdom[2],'domeniu4': listdom[3], 'domeniu5': listdom[4],'domeniu6': listdom[5], 'admitere1': listadm[0], 'admitere2': listadm[1], 'oras1':listorase[0], 'oras2':listorase[1], 'oras3':listorase[2], 'oras4':listorase[3], 'oras5':listorase[4], 'oras6':listorase[5]})
+            crsr2.execute("SELECT distinct facName,univName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu,encode(facimg, 'base64') as imagine, fac_link FROM Facs where profilelev=%(profil)s and (domeniu~%(domeniu1)s or domeniu~%(domeniu2)s or domeniu~%(domeniu3)s or domeniu~%(domeniu4)s or domeniu~%(domeniu5)s or domeniu~%(domeniu6)s) and (locatie=%(oras1)s or locatie=%(oras2)s or locatie=%(oras3)s or locatie=%(oras4)s or locatie=%(oras5)s or locatie=%(oras6)s) and (tipAdmitere=%(admitere1)s or tipAdmitere=%(admitere2)s)", {'profil': profil, 'domeniu1': listdom[0],'domeniu2': listdom[1], 'domeniu3': listdom[2],'domeniu4': listdom[3], 'domeniu5': listdom[4],'domeniu6': listdom[5], 'admitere1': listadm[0], 'admitere2': listadm[1], 'oras1':listorase[0], 'oras2':listorase[1], 'oras3':listorase[2], 'oras4':listorase[3], 'oras5':listorase[4], 'oras6':listorase[5]})
             date_fac = crsr2.fetchall()
         
         #print(date_fac)
@@ -545,7 +546,7 @@ def form_elev():
         else:
             date_json = json.dumps(date_fac)
             list_facs= json.loads(date_json)
-            ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5],x[6],x[7],x[8],x[9]) for x in list_facs]
+            ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5],x[6],x[7],x[8],x[9],x[10]) for x in list_facs]
             for x in list_facs:
                 image_bytes = bytes(x[9], encoding='utf-8')
                 decoded_image = base64.b64encode(image_bytes).decode('utf-8')

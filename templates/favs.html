@@ -105,7 +105,10 @@
         <p><b>Durată pregătire licență: </b>{{ ready_list_facs[i][4] }} ani</p>
       </div>
       <div class="column">
-        <p><b>Ultima medie de intrare din cadrul ultimei sesiuni de admitere: </b>{{ ready_list_facs[i][6] }}, la {{ ready_list_facs[i][5] }}</p>
+        <p><b>Ultima medie de intrare cunoscută: </b>{{ ready_list_facs[i][6] }}, la {{ ready_list_facs[i][5] }}</p>
+      </div>
+      <div class="column">
+        <p><b>Link-ul către website-ul facultății: </b>{{ ready_list_facs[i][10] }}</p>
       </div>
     </div>
     <button class="delete-button" data-user-type="{{ usertype }}" data-index="{{ loop.index0 }}" onclick="removePanel(event)">Șterge din Favorite</button>
@@ -172,6 +175,9 @@
               </div>
               <div class="column">
                 <p><b>Formatul de studiu abordat în cadrul programelor de masterat: </b>{{ ready_list_facs_student[i][6] }}</p>
+              </div>
+              <div class="column">
+                <p><b>Link-ul către website-ul facultății: </b>{{ ready_list_facs_student[i][7] }}</p>
               </div>
             </div>
             <button class="delete-button" data-user-type="{{ usertype }}" data-index="{{ loop.index0 }}" onclick="removePanel(event)">Șterge din Favorite</button>

@@ -76,6 +76,17 @@
   <div class="search-panel">
     <input type="text" id="searchInput" placeholder="Căutați o facultate...">
   </div>
+  {% if usertype == 'elev' or usertype == 'profesor' or usertype == 'consilier cariera' %}
+  <div class="dropdown">
+    <button class="dropbtn transparent-button" onclick="toggleDropdown()">Taxă/Buget</button>
+    <div class="dropdown-content" id="taxaDropdownContent" onchange="searchList3()">
+      <select id="taxaDropdown" class="transparent-dropdown" size="2" multiple onchange="searchList3()">
+            <option value="Taxă">Taxă</option>
+            <option value="Buget">Buget</option>
+        </select>
+    </div>
+</div> 
+  {% endif %}
   {% if date_fac_prof_consi %}
     {% if usertype == 'elev' or usertype == 'profesor' or usertype == 'consilier cariera' %}     
       {% for i in range(len_list_prof_cons) %}
@@ -89,7 +100,7 @@
               <br><br>
               <p style="font-size: 20px;"><b>{{ ready_list_facs_prof_cons[i][0] }}</b></p>
               <p style="font-size: 20px;"><b>{{ ready_list_facs_prof_cons[i][1] }}, {{ ready_list_facs_prof_cons[i][2] }}</b></p>
-              <p style="font-size: 20px;"><b>Mod învățământ: {{ ready_list_facs_prof_cons[i][5] }}</b></p>
+              <p style="font-size: 20px;" class="taxa"><b>Mod învățământ: {{ ready_list_facs_prof_cons[i][5] }}</b></p>
             </div>
             <div class="grid-item">
               <img src="data:image/png;base64,{{ ready_list_facs_prof_cons[i][9] }}" alt="Image" width="200">
@@ -106,7 +117,7 @@
           <p><b>Durată pregătire licență: </b>{{ ready_list_facs_prof_cons[i][4] }} ani</p>
         </div>
         <div class="column">
-          <p><b>Ultima medie de intrare din cadrul ultimei sesiuni de admitere: </b>{{ ready_list_facs_prof_cons[i][6] }}, la {{ ready_list_facs_prof_cons[i][5] }}</p>
+          <p><b>Ultima medie de intrare cunoscută:  </b>{{ ready_list_facs_prof_cons[i][6] }}, la {{ ready_list_facs_prof_cons[i][5] }}</p>
         </div>
         <div class="column">
           <p><b>Dificultate programe master (medie): </b>{{ ready_list_facs_prof_cons[i][10] }}/5</p>
@@ -116,6 +127,9 @@
         </div>
         <div class="column">
           <p><b>Formatul de studiu abordat în cadrul programelor de masterat: </b>{{ ready_list_facs_prof_cons[i][12] }}</p>
+        </div>
+        <div class="column">
+          <p><b>Link-ul către website-ul facultății: </b>{{ ready_list_facs_prof_cons[i][13] }}</p>
         </div>
       </div>
       <button class="add-button" data-index="{{ loop.index0 }}" onclick="addToFavorites(event)">Adaugă la Favorite</button>
@@ -149,6 +163,9 @@
         <div class="column">
           <p><b>Formatul de studiu abordat în cadrul programelor de masterat: </b>{{ ready_list_facs_prof_cons[i][6] }}</p>
         </div>
+        <div class="column">
+          <p><b>Link-ul către website-ul facultății: </b>{{ ready_list_facs_prof_cons[i][7] }}</p>
+        </div>
       </div>
       <button class="add-button" data-index="{{ loop.index0 }}" onclick="addToFavorites(event)">Adaugă la Favorite</button>
     </div>
@@ -181,6 +198,36 @@
       };
   
       xhr.send(JSON.stringify({ index: index }));
+    }
+  </script>
+  <style>
+    .dropdown-content {
+      display: none;
+    }
+    
+    .dropdown-content.show {
+      display: block;
+    }
+  </style>
+  
+  <script>
+    function toggleDropdown() {
+      const dropdownContent = document.getElementById('taxaDropdownContent');
+      dropdownContent.classList.toggle('show');
+    }
+  
+    function searchList3() {
+      const selectedOption = document.getElementById('taxaDropdown').value;
+  
+      const panels = document.querySelectorAll('.panel');
+      panels.forEach((panel) => {
+        const taxa = panel.dataset.taxa;
+        if (selectedOption === '' || selectedOption.includes(taxa)) {
+          panel.style.display = 'block';
+        } else {
+          panel.style.display = 'none';
+        }
+      });
     }
   </script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

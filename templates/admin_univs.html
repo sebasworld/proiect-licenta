@@ -125,6 +125,9 @@
         <div class="column">
           <p><b>Formatul de studiu abordat în cadrul programelor de masterat: </b>{{ ready_list_facs[i][12] }}</p>
         </div>
+        <div class="column">
+          <p><b>Link-ul către website-ul facultății: </b>{{ ready_list_facs[i][14] }}</p>
+        </div>
         <br><br><br>
         <div class="modify-panel">
           <p style="font-size: 30px;"><b>Modificați datele facultății:</b></p><br><br>
@@ -240,41 +243,49 @@
       });
   }    
 
+  let modifiedPanel = null;
   function modifyPanel(button) {
     var panel = button.closest('.panel');
     var modifyPanel = panel.querySelector('.modify-panel');
-    modifyPanel.style.display = 'block'; // Show the modify panel
-  
-    // You can perform additional actions here, such as pre-populating the input fields with existing data or applying any necessary event listeners.
-  }
 
-  function submitForm() {
-    var form = document.getElementById("modifyForm");
-    var formData = new FormData(form);
-    var facultyPanel = document.querySelector('.panel.panel-collapsed:not(.panel-modify)');
-    var facultyId = facultyPanel.getAttribute('data-faculty-id');
+    // Toggle the display of the panel content
+    if (modifyPanel.style.display === "block") {
+      modifyPanel.style.display = "none";
+      modifiedPanel = null;
+    } else {
+      modifyPanel.style.display = "block";
+      modifiedPanel = panel;
+    }
+  }
+    // You can perform additional actions here, such as pre-populating the input fields with existing data or applying any necessary event listeners.
+    function submitForm() {
+      if (modifiedPanel) {
+        var form = modifiedPanel.querySelector("#modifyForm");
+        var formData = new FormData(form);
+        var facultyId = modifiedPanel.getAttribute('data-faculty-id');
   
-    formData.append('facultyId', facultyId);
+        formData.append('facultyId', facultyId);
   
-    fetch('/modify_fac', {
-      method: 'POST',
-      body: formData
-    })
-      .then(response => {
-        if (response.ok) {
-          // Faculty modified successfully
-          console.log('Faculty modified successfully');
-          location.reload();
-        } else {
-          // Error modifying faculty
-          console.error('Error modifying faculty');
-        }
-      })
-      .catch(error => {
-        // Handle network errors or other exceptions
-        console.error('An error occurred:', error);
-      });
-  }  
+        fetch('/modify_fac', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => {
+          if (response.ok) {
+            // Faculty modified successfully
+            console.log('Faculty modified successfully');
+            location.reload();
+          } else {
+            // Error modifying faculty
+            console.error('Error modifying faculty');
+          }
+        })
+        .catch(error => {
+          // Handle network errors or other exceptions
+          console.error('An error occurred:', error);
+        });
+      }
+    }
   
 
 </script>
