@@ -76,21 +76,22 @@ SELECT * FROM Users WHERE 1 = 1;
 
 create table Facs(
 	facid SERIAL PRIMARY KEY,
-	facName varchar(100) NOT NULL,
-	univName varchar(100) NOT NULL,
-	locatie varchar(100) NOT NULL,
-	rating varchar(100) NOT NULL,
-	durataLicenta varchar(100) NOT NULL,
-	taxa varchar(100) NOT NULL,
-	ultimaMedie varchar(100) NOT NULL,
-	tipAdmitere varchar(100) NOT NULL,
-	profilelev varchar(100) NOT NULL,
-	domeniu varchar(100) NOT NULL,
-	programestudiu varchar(100) NOT NULL,
-	nivel_master varchar(100) NOT NULL,
-	aspecte_domeniu_master varchar(100) NOT NULL,
-	format_master varchar(100) NOT NULL,
-	fac_link varchar(100) NOT NULL
+	facName varchar(200) NOT NULL,
+	univName varchar(200) NOT NULL,
+	locatie varchar(200) NOT NULL,
+	rating varchar(200) NOT NULL,
+	durataLicenta varchar(200) NOT NULL,
+	taxa varchar(200) NOT NULL,
+	ultimaMedie varchar(200) NOT NULL,
+	tipAdmitere varchar(200) NOT NULL,
+	profilelev varchar(200) NOT NULL,
+	domeniu varchar(200) NOT NULL,
+	programestudiu varchar(200) NOT NULL,
+	nivel_master varchar(200) NOT NULL,
+	aspecte_domeniu_master varchar(200) NOT NULL,
+	format_master varchar(200) NOT NULL,
+	fac_link varchar(200) NOT NULL,
+	alumni_jobs varchar(200) NOT NULL
 );
 
 ALTER TABLE Facs

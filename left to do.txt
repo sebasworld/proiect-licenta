@@ -3,6 +3,7 @@
 - stergere users ca admin
 - filtre de aplicat la pagina cu toate universitatile pt toti utilizatorii
 - modificat ecranul de acasa (pus o alta poza + contact + mesaj de welcome) 
+- search la favorite
 
 - poate de facut security ca sa nu mi dea eroare cand incerc sa accesez din bara fara sa ma loghez, sa-mi dea un mesaj
 - paginare pt facultati - la toate si la favorite

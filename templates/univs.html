@@ -43,15 +43,24 @@
 <head>  
     <title>Universități</title>
 </head>
-
+{% if usertype == 'elev' or usertype == 'student' %}
+<body>
+  <div class="topnav">
+    <a href="{{url_for('logged_home')}}">Acasă</a>
+    <a class="active" href="{{url_for('univs')}}">Toate facultățile</a>
+    <a href="{{url_for('favs')}}">Favorite</a>
+    <a class="right" href="{{url_for('logout')}}">Delogare ({{ username }})</a>
+  </div>
+</body>
+{% elif usertype == 'alumni' %}
 <body>
     <div class="topnav">
       <a href="{{url_for('logged_home')}}">Acasă</a>
       <a class="active" href="{{url_for('univs')}}">Toate facultățile</a>
-      <a href="{{url_for('favs')}}">Favorite</a>
       <a class="right" href="{{url_for('logout')}}">Delogare ({{ username }})</a>
     </div>
 </body>
+{% endif %}
 
 {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -76,21 +85,22 @@
   <div class="search-panel">
     <input type="text" id="searchInput" placeholder="Căutați o facultate...">
   </div>
-  {% if usertype == 'elev' or usertype == 'profesor' or usertype == 'consilier cariera' %}
+  {% if usertype == 'elev' %}
   <div class="dropdown">
     <button class="dropbtn transparent-button" onclick="toggleDropdown()">Taxă/Buget</button>
-    <div class="dropdown-content" id="taxaDropdownContent" onchange="searchList3()">
-      <select id="taxaDropdown" class="transparent-dropdown" size="2" multiple onchange="searchList3()">
+    <div class="dropdown-content" id="taxaDropdownContent">
+      <select id="taxaDropdown" class="transparent-dropdown" size="3" multiple onchange="searchList3()">
             <option value="Taxă">Taxă</option>
             <option value="Buget">Buget</option>
+            <option value="General">General</option>
         </select>
     </div>
 </div> 
   {% endif %}
   {% if date_fac_prof_consi %}
-    {% if usertype == 'elev' or usertype == 'profesor' or usertype == 'consilier cariera' %}     
+    {% if usertype == 'elev'%}     
       {% for i in range(len_list_prof_cons) %}
-      <div class="panel panel-collapsed">
+      <div class="panel panel-collapsed" {% if ready_list_facs_prof_cons[i][5] == 'Taxă' %}taxa{% elif ready_list_facs_prof_cons[i][5] == 'Buget' %}buget{% else %}general{% endif %}">
         <div class="panel-toggle">
           <span class="arrow">▼</span>
         </div>
@@ -111,7 +121,7 @@
         <div class="column">
           <p><b>Domeniile de studiu în cadrul pregătirii academice: </b>{{ ready_list_facs_prof_cons[i][7] }}</p>
           <p><b>Programe de studiu disponibile în cadrul facultății: </b>{{ ready_list_facs_prof_cons[i][8] }}</p>
-          <p><b>Rating-ul nivelului academic de pregătire: </b>{{ ready_list_facs_prof_cons[i][3] }}/5</p>
+          <p><b>Rating-ul mulțumirii studenților: </b>{{ ready_list_facs_prof_cons[i][3] }}/5</p>
         </div>
         <div class="column">
           <p><b>Durată pregătire licență: </b>{{ ready_list_facs_prof_cons[i][4] }} ani</p>
@@ -120,7 +130,7 @@
           <p><b>Ultima medie de intrare cunoscută:  </b>{{ ready_list_facs_prof_cons[i][6] }}, la {{ ready_list_facs_prof_cons[i][5] }}</p>
         </div>
         <div class="column">
-          <p><b>Dificultate programe master (medie): </b>{{ ready_list_facs_prof_cons[i][10] }}/5</p>
+          <p><b>Rating-ul nivelurilor de pregătire a programelor de master (medie): </b>{{ ready_list_facs_prof_cons[i][10] }}/5</p>
         </div>
         <div class="column">
           <p><b>Aspecte aprofundate în cadrul programelor de masterat: </b>{{ ready_list_facs_prof_cons[i][11] }}</p>
@@ -135,7 +145,84 @@
       <button class="add-button" data-index="{{ loop.index0 }}" onclick="addToFavorites(event)">Adaugă la Favorite</button>
     </div>
     {% endfor %}
-    {% elif usertype == 'student' %}     
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      .dropdown-content {
+        display: none;
+      }
+      
+      .dropdown-content.show {
+        display: block;
+      }
+    </style>
+    
+    <script>
+      function toggleDropdown() {
+        const dropdownContent = document.getElementById('taxaDropdownContent');
+        dropdownContent.classList.toggle('show');
+      }
+    
+      function searchList3() {
+        const selectedOption = document.getElementById('taxaDropdown').value;
+    
+        const panels = document.querySelectorAll('.panel');
+        panels.forEach((panel) => {
+          const taxa = panel.dataset.taxa;
+          if (selectedOption === '' || selectedOption.includes(taxa)) {
+            panel.style.display = 'block';
+          } else {
+            panel.style.display = 'none';
+          }
+        });
+      }
+    </script>
+<script>
+  $(document).ready(function() {
+    // Filter panels based on search input and dropdown selection
+    $('#searchInput').on('input', function() {
+      var searchValue = $(this).val().toLowerCase();
+      var filterValue = $('#taxaDropdown').val(); // Get selected filter value
+
+      $('.panel').each(function() {
+        var panelText = $(this).text().toLowerCase();
+        var showPanel = true;
+
+        // Check if panel matches search input
+        if (panelText.indexOf(searchValue) === -1) {
+          showPanel = false;
+        }
+
+        // Check if panel matches dropdown filter
+        if (filterValue.length > 0) {
+          var panelTaxa = panelText.indexOf('taxă') !== -1;
+          var panelBuget = panelText.indexOf('buget') !== -1;
+          var panelGeneral = panelText.indexOf('general') !== -1;
+
+          if (
+            (panelTaxa && !filterValue.includes('Taxă')) ||
+            (panelBuget && !filterValue.includes('Buget')) ||
+            (panelGeneral && !filterValue.includes('General'))
+          ) {
+            showPanel = false;
+          }
+        }
+
+        // Show/hide panel based on search and filter
+        if (showPanel) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+    });
+
+    // Function to handle dropdown selection change
+    $('#taxaDropdown').on('change', function() {
+      $('#searchInput').trigger('input'); // Trigger search input change to update results
+    });
+  });
+</script>
+    {% elif usertype == 'student' or usertype == 'alumni'%}     
       {% for i in range(len_list_prof_cons) %}
       <div class="panel panel-collapsed">
         <div class="panel-toggle">
@@ -155,7 +242,7 @@
         </div>      
       <div class="panel-content">
         <div class="column">
-          <p><b>Dificultate programe master (medie): </b>{{ ready_list_facs_prof_cons[i][4] }}/5</p>
+          <p><b>Rating-ul nivelurilor de pregătire a programelor de master (medie): </b>{{ ready_list_facs_prof_cons[i][4] }}/5</p>
         </div>
         <div class="column">
           <p><b>Aspecte aprofundate în cadrul programelor de masterat: </b>{{ ready_list_facs_prof_cons[i][5] }}</p>
@@ -165,6 +252,9 @@
         </div>
         <div class="column">
           <p><b>Link-ul către website-ul facultății: </b>{{ ready_list_facs_prof_cons[i][7] }}</p>
+        </div>
+        <div class="column">
+          <p><b>Oportunități de job-uri sau programe de voluntariat pentru absolvenți: </b>{{ ready_list_facs_prof_cons[i][8] }}</p>
         </div>
       </div>
       <button class="add-button" data-index="{{ loop.index0 }}" onclick="addToFavorites(event)">Adaugă la Favorite</button>
@@ -190,62 +280,17 @@
       xhr.onload = function () {
         if (xhr.status === 200) {
           // Panel added successfully
-          alert('Panel added to favorites successfully.');
+          console.log('Faculty added to favorites successfully');
+          location.reload();
         } else {
           // Error adding panel
-          alert('Error adding panel to favorites.');
+          console.log('Faculty added to favorites failed');
+          location.reload();
         }
       };
   
       xhr.send(JSON.stringify({ index: index }));
     }
   </script>
-  <style>
-    .dropdown-content {
-      display: none;
-    }
-    
-    .dropdown-content.show {
-      display: block;
-    }
-  </style>
-  
-  <script>
-    function toggleDropdown() {
-      const dropdownContent = document.getElementById('taxaDropdownContent');
-      dropdownContent.classList.toggle('show');
-    }
-  
-    function searchList3() {
-      const selectedOption = document.getElementById('taxaDropdown').value;
-  
-      const panels = document.querySelectorAll('.panel');
-      panels.forEach((panel) => {
-        const taxa = panel.dataset.taxa;
-        if (selectedOption === '' || selectedOption.includes(taxa)) {
-          panel.style.display = 'block';
-        } else {
-          panel.style.display = 'none';
-        }
-      });
-    }
-  </script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-  $(document).ready(function() {
-    // Filter panels based on search input
-    $('#searchInput').on('input', function() {
-      var searchValue = $(this).val().toLowerCase();
-      $('.panel').each(function() {
-        var panelText = $(this).text().toLowerCase();
-        if (panelText.indexOf(searchValue) > -1) {
-          $(this).show();
-        } else {
-          $(this).hide();
-        }
-      });
-    });
-  });
-</script>
    {% endif %}
 </html>

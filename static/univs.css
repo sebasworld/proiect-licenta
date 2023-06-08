@@ -163,3 +163,8 @@ body {
     .add-button:hover {
       background-color: green;
     }
+
+    .dropdown-container {
+  display: flex;
+  justify-content: space-between;
+}

@@ -45,6 +45,7 @@ def add_fac():
         aspecte = request.form['aspecte']
         format1 = request.form['format']
         link_fac = request.form['linkfac']
+        alumni_jobs = request.form['alumnijobs']
 
         conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
         cursor = conn.cursor()
@@ -53,7 +54,7 @@ def add_fac():
         img_data = image_file.read()
 
         try:
-            cursor.execute("INSERT INTO Facs (facName, univName, locatie, rating, durataLicenta, taxa, ultimaMedie, tipAdmitere, profilelev, domeniu, programestudiu,nivel_master, aspecte_domeniu_master, format_master,facimg,fac_link) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s)", (facName,univName, locatie,rating, licenta ,taxa,medie,admitere,profil,domeniu,programeStud,dific, aspecte,format1,psycopg2.Binary(img_data), link_fac))
+            cursor.execute("INSERT INTO Facs (facName, univName, locatie, rating, durataLicenta, taxa, ultimaMedie, tipAdmitere, profilelev, domeniu, programestudiu,nivel_master, aspecte_domeniu_master, format_master,facimg,fac_link, alumni_jobs) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s, %s)", (facName,univName, locatie,rating, licenta ,taxa,medie,admitere,profil,domeniu,programeStud,dific, aspecte,format1,psycopg2.Binary(img_data), link_fac, alumni_jobs))
             conn.commit()
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
@@ -134,7 +135,7 @@ def admin_univs():
         conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
         crsr = conn.cursor()
 
-        crsr.execute("SELECT distinct facName, univName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu,encode(facimg, 'base64') as imagine, nivel_master,aspecte_domeniu_master,format_master,facid, fac_link FROM Facs")
+        crsr.execute("SELECT distinct facName, univName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu,encode(facimg, 'base64') as imagine, nivel_master,aspecte_domeniu_master,format_master,facid, fac_link, alumni_jobs FROM Facs")
         date_fac = crsr.fetchall()
 
         if not date_fac:
@@ -143,7 +144,7 @@ def admin_univs():
         else:
             date_json = json.dumps(date_fac)
             list_facs= json.loads(date_json)
-            ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5], x[6],x[7],x[8],x[9],x[10],x[11],x[12], x[13], x[14]) for x in list_facs]
+            ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5], x[6],x[7],x[8],x[9],x[10],x[11],x[12], x[13], x[14], x[15]) for x in list_facs]
             for x in list_facs:
                 image_bytes = bytes(x[9], encoding='utf-8')
                 decoded_image = base64.b64encode(image_bytes).decode('utf-8')
@@ -198,11 +199,11 @@ def logged_home():
 def univs():
     if request.method == 'GET':
         user_type = session['tip']
-        if user_type == 'elev' or user_type == 'profesor' or user_type == 'consilier cariera':
+        if user_type == 'elev':
             conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
             crsr = conn.cursor()
 
-            crsr.execute("SELECT distinct facName, univName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu,encode(facimg, 'base64') as imagine, nivel_master,aspecte_domeniu_master,format_master, fac_link FROM Facs")
+            crsr.execute("SELECT distinct facName, univName,locatie,rating,duratalicenta,taxa,ultimamedie,domeniu,programestudiu,encode(facimg, 'base64') as imagine, nivel_master,aspecte_domeniu_master,format_master, fac_link  FROM Facs")
             date_fac_prof_consi = crsr.fetchall()
             #print(date_fac_prof_consi)
 
@@ -223,11 +224,11 @@ def univs():
                 len_list = len(ready_list_facs)
                 conn.close()
                 return render_template('univs.html', usertype = user_type,date_fac_prof_consi=date_fac_prof_consi, len_list_prof_cons=len_list, ready_list_facs_prof_cons=ready_list_facs,username=session['user'])
-        elif user_type == 'student':
+        elif user_type == 'student' or user_type == 'alumni':
             conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
             crsr = conn.cursor()
 
-            crsr.execute("SELECT distinct facName, univName,locatie,encode(facimg, 'base64') as imagine, nivel_master,aspecte_domeniu_master,format_master, fac_link FROM Facs")
+            crsr.execute("SELECT distinct facName, univName,locatie,encode(facimg, 'base64') as imagine, nivel_master,aspecte_domeniu_master,format_master, fac_link, alumni_jobs FROM Facs")
             date_fac_prof_consi = crsr.fetchall()
             #print(date_fac_prof_consi)
 
@@ -237,7 +238,7 @@ def univs():
             else:
                 date_json = json.dumps(date_fac_prof_consi)
                 list_facs= json.loads(date_json)
-                ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5], x[6], x[7]) for x in list_facs]
+                ready_list_facs = [(x[0], x[1], x[2],x[3],x[4],x[5], x[6], x[7], x[8]) for x in list_facs]
                 for x in list_facs:
                     image_bytes = bytes(x[3], encoding='utf-8')
                     decoded_image = base64.b64encode(image_bytes).decode('utf-8')
@@ -415,12 +416,13 @@ def add_to_favorites():
     # Check the user type and update the session accordingly
     if user_type == 'student':
         session.setdefault('student', {}).setdefault(user_id, []).append(selected_panel)
+        flash("Facultatea a fost adăugată cu succes la Favorite!", category='success')
     elif user_type == 'elev':
         session.setdefault('elev', {}).setdefault(user_id, []).append(selected_panel)
+        flash("Facultatea a fost adăugată cu succes la Favorite!", category='success')
     else:
         return jsonify(message='Invalid user type.'), 400
-
-    return jsonify(message='Panel added to favorites successfully.'), 200
+    return redirect(url_for('favs'))
 
 
 @app.route('/remove_panel', methods=['POST'])
@@ -441,12 +443,14 @@ def remove_panel():
         elev_data = session['elev'].get(session['userid'])
         if elev_data and 0 <= index < len(elev_data):
             del elev_data[index]
+            flash("Facultate ștearsă cu succes!", category='success')
         else:
             return 'User data not found in session.'
     elif user_type == 'student' and session.get('student'):
         student_data = session['student'].get(session['userid'])
         if student_data and 0 <= index < len(student_data):
             del student_data[index]
+            flash("Facultate ștearsă cu succes!", category='success')
         else:
             return 'User data not found in session.'
     else:
@@ -612,7 +616,7 @@ def login():
                         session[username] = True
                         return redirect(url_for('form_student'))
                     return redirect(url_for('favs'))   
-                elif tip == 'profesor' or tip == 'consilier cariera':
+                elif tip == 'alumni':
                     if "user" not in session:
                         session['user'] = username
                         session['tip'] = tip 
@@ -651,12 +655,13 @@ def register():
         elif user_type is None:
             flash('Este obligatoriu să alegeți un tip de utilizator!', category='error')
         else:
-            flash('Cont creat cu succes! Accesați pagina de logare.', category='success')
+            flash('Cont creat cu succes! Puteți să vă logați!', category='success')
             crsr = conn.cursor()
             crsr.execute("insert into Users(username,tip,passwd) VALUES(%(username)s, %(tip)s , %(passwd)s)", {'username': username, 'tip': user_type, 'passwd': password}) 
             conn.commit()
             crsr.close()
             conn.close()
+            return redirect(url_for('login'))
     return render_template('register.html')
 
 
