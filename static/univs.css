@@ -168,3 +168,43 @@ body {
   display: flex;
   justify-content: space-between;
 }
+
+
+.search-panel {
+  background-color: transparent;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropbtn.transparent-button {
+  background-color: transparent;
+  color: #f8f8f8; /* Set the desired text color */
+  border: 1px solid #f1ecec; /* Set the black border */
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.5); /* Set the desired transparency value */
+  min-width: 50px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  overflow-y: auto; /* Hide scrollbars */
+}
+
+.dropdown-content .transparent-dropdown {
+  background-color: white;
+}
+
+.cursive-text {
+  font-family: cursive;
+}
+
+.button-content {
+  position: relative;
+  right: 100%; /* Move content to the left */
+}

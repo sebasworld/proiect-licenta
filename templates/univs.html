@@ -82,20 +82,22 @@
     {% endwith %} 
 
 <div style="position:relative;margin:20px">
-  <div class="search-panel">
-    <input type="text" id="searchInput" placeholder="Căutați o facultate...">
-  </div>
   {% if usertype == 'elev' %}
-  <div class="dropdown">
-    <button class="dropbtn transparent-button" onclick="toggleDropdown()">Taxă/Buget</button>
-    <div class="dropdown-content" id="taxaDropdownContent">
-      <select id="taxaDropdown" class="transparent-dropdown" size="3" multiple onchange="searchList3()">
-            <option value="Taxă">Taxă</option>
-            <option value="Buget">Buget</option>
-            <option value="General">General</option>
-        </select>
-    </div>
-</div> 
+  <div class="search-panel">
+    <input type="text" id="searchInput" placeholder="Căutați o facultate..."><br><br>
+    <div class="dropdown">
+      <div class="button-container">
+        <button class="dropbtn transparent-button cursive-text" onclick="toggleDropdown()">Taxă/Buget</button>
+      </div>
+        <div class="dropdown-content" id="taxaDropdownContent">
+        <select id="taxaDropdown" class="transparent-dropdown cursive-text" size="3" multiple onchange="searchList3()">
+              <option value="Taxă">Taxă</option>
+              <option value="Buget">Buget</option>
+              <option value="General">General</option>
+          </select>
+      </div>
+  </div> 
+  </div>
   {% endif %}
   {% if date_fac_prof_consi %}
     {% if usertype == 'elev'%}     
@@ -176,53 +178,57 @@
         });
       }
     </script>
-<script>
-  $(document).ready(function() {
-    // Filter panels based on search input and dropdown selection
-    $('#searchInput').on('input', function() {
-      var searchValue = $(this).val().toLowerCase();
-      var filterValue = $('#taxaDropdown').val(); // Get selected filter value
-
-      $('.panel').each(function() {
-        var panelText = $(this).text().toLowerCase();
-        var showPanel = true;
-
-        // Check if panel matches search input
-        if (panelText.indexOf(searchValue) === -1) {
-          showPanel = false;
-        }
-
-        // Check if panel matches dropdown filter
-        if (filterValue.length > 0) {
-          var panelTaxa = panelText.indexOf('taxă') !== -1;
-          var panelBuget = panelText.indexOf('buget') !== -1;
-          var panelGeneral = panelText.indexOf('general') !== -1;
-
-          if (
-            (panelTaxa && !filterValue.includes('Taxă')) ||
-            (panelBuget && !filterValue.includes('Buget')) ||
-            (panelGeneral && !filterValue.includes('General'))
-          ) {
-            showPanel = false;
-          }
-        }
-
-        // Show/hide panel based on search and filter
-        if (showPanel) {
-          $(this).show();
-        } else {
-          $(this).hide();
-        }
+    <script>
+      $(document).ready(function() {
+        // Filter panels based on search input and dropdown selection
+        $('#searchInput').on('input', function() {
+          var searchValue = $(this).val().toLowerCase();
+          var filterValue = $('#taxaDropdown').val(); // Get selected filter value
+    
+          $('.panel').each(function() {
+            var panelText = $(this).text().toLowerCase();
+            var showPanel = true;
+    
+            // Check if panel matches search input
+            if (panelText.indexOf(searchValue) === -1) {
+              showPanel = false;
+            }
+    
+            // Check if panel matches dropdown filter
+            if (filterValue.length > 0) {
+              var panelTaxa = panelText.indexOf('taxă') !== -1;
+              var panelBuget = panelText.indexOf('buget') !== -1;
+              var panelGeneral = panelText.indexOf('general') !== -1;
+    
+              if (
+                (panelTaxa && !filterValue.includes('Taxă')) ||
+                (panelBuget && !filterValue.includes('Buget')) ||
+                (panelGeneral && !filterValue.includes('General'))
+              ) {
+                showPanel = false;
+              }
+            }
+    
+            // Show/hide panel based on search and filter
+            if (showPanel) {
+              $(this).show();
+            } else {
+              $(this).hide();
+            }
+          });
+        });
+    
+        // Function to handle dropdown selection change
+        $('#taxaDropdown').on('change', function() {
+          $('#searchInput').trigger('input'); // Trigger search input change to update results
+        });
       });
-    });
+    </script>
 
-    // Function to handle dropdown selection change
-    $('#taxaDropdown').on('change', function() {
-      $('#searchInput').trigger('input'); // Trigger search input change to update results
-    });
-  });
-</script>
     {% elif usertype == 'student' or usertype == 'alumni'%}     
+    <div class="search-panel">
+      <input type="text" id="searchInput" placeholder="Căutați o facultate...">
+    </div>
       {% for i in range(len_list_prof_cons) %}
       <div class="panel panel-collapsed">
         <div class="panel-toggle">
@@ -262,6 +268,7 @@
     {% endfor %}
     {% endif %}
   </div>
+  
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     $(document).ready(function() {
@@ -292,5 +299,22 @@
       xhr.send(JSON.stringify({ index: index }));
     }
   </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // Filter panels based on search input
+    $('#searchInput').on('input', function() {
+      var searchValue = $(this).val().toLowerCase();
+      $('.panel').each(function() {
+        var panelText = $(this).text().toLowerCase();
+        if (panelText.indexOf(searchValue) > -1) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+    });
+  });
+</script>
    {% endif %}
 </html>
