@@ -1,5 +1,5 @@
 body {
-    background-image: url('/static/blue-image.jpg');
+    background-image: url('/static/blue_wall.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
@@ -26,6 +26,35 @@ body {
     color: inherit;
     border-radius: 15px;
     cursor: pointer;
+  }
+
+  .search-panel {
+    margin: 2em 5em;
+    padding: 1em;
+    background: rgb(2, 0, 36);
+    background: linear-gradient(117deg, rgba(2, 0, 36, 1) 0%, rgba(125, 129, 150, 0.9757503221014968) 96%, rgba(222, 199, 45, 1) 98%, rgba(222, 199, 45, 1) 98%, rgba(142, 49, 242, 0.5859143339953169) 98%);
+    color: #fff;
+    font-family: cursive;
+    border-radius: 1.25rem;
+  }
+   
+  .search-panel input[type="text"] {
+    width: 100%;
+    padding: 0.5em;
+    font-size: 16px;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    outline: none;
+  }
+  
+  .search-panel input[type="text"]::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .search-panel input[type="text"]:focus {
+    background-color: rgba(255, 255, 255, 0.3);
   }
 
   /* Add a black background color to the top navigation */

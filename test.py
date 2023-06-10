@@ -27,6 +27,27 @@ def home():
 def admin_home():
     return render_template('admin_home.html', username = session['user'])
 
+@app.route('/delete_user', methods=['POST'])
+def delete_user():
+    user_id = request.form.get('user_id')
+
+    conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("DELETE FROM Users WHERE userid = %s", (user_id,))
+        conn.commit()
+        flash('Utilizator șters cu succes!', category='success')
+        return redirect(url_for('admin_users'))
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        conn.rollback()
+        flash('Utilizatorul nu a fost șters!', category='error')
+        return redirect(url_for('admin_users'))
+    finally:
+        conn.close()
+
+
 @app.route('/add_fac', methods=['post', 'get'])
 def add_fac():
     if request.method == 'POST':

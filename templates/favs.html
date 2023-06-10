@@ -76,7 +76,10 @@
     {% endwith %} 
 
 <div style="position:relative;margin:20px">
-  {% if usertype =='elev' %}      
+  {% if usertype =='elev' %}     
+  <div class="search-panel">
+    <input type="text" id="searchInput" placeholder="Căutați o facultate...">
+  </div> 
     {% for i in range(lungime) %}
     <div class="panel panel-collapsed">
       <div class="panel-toggle">
@@ -118,6 +121,23 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   $(document).ready(function() {
+    // Filter panels based on search input
+    $('#searchInput').on('input', function() {
+      var searchValue = $(this).val().toLowerCase();
+      $('.panel').each(function() {
+        var panelText = $(this).text().toLowerCase();
+        if (panelText.indexOf(searchValue) > -1) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+    });
+  });
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
     $('.panel-toggle').click(function() {
       $(this).closest('.panel').toggleClass('panel-expanded panel-collapsed');
     });
@@ -149,6 +169,9 @@
 </script>
 <div style="position:relative;margin:20px">
   {% elif usertype == 'student' %}   
+  <div class="search-panel">
+    <input type="text" id="searchInput" placeholder="Căutați o facultate...">
+  </div>
           {% for i in range(lungime) %}
           <div class="panel panel-collapsed">
             <div class="panel-toggle">
@@ -184,6 +207,23 @@
           </div>
       {% endfor %}
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // Filter panels based on search input
+    $('#searchInput').on('input', function() {
+      var searchValue = $(this).val().toLowerCase();
+      $('.panel').each(function() {
+        var panelText = $(this).text().toLowerCase();
+        if (panelText.indexOf(searchValue) > -1) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+    });
+  });
+</script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     $(document).ready(function() {

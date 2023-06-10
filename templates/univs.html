@@ -147,83 +147,6 @@
       <button class="add-button" data-index="{{ loop.index0 }}" onclick="addToFavorites(event)">Adaugă la Favorite</button>
     </div>
     {% endfor %}
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-      .dropdown-content {
-        display: none;
-      }
-      
-      .dropdown-content.show {
-        display: block;
-      }
-    </style>
-    
-    <script>
-      function toggleDropdown() {
-        const dropdownContent = document.getElementById('taxaDropdownContent');
-        dropdownContent.classList.toggle('show');
-      }
-    
-      function searchList3() {
-        const selectedOption = document.getElementById('taxaDropdown').value;
-    
-        const panels = document.querySelectorAll('.panel');
-        panels.forEach((panel) => {
-          const taxa = panel.dataset.taxa;
-          if (selectedOption === '' || selectedOption.includes(taxa)) {
-            panel.style.display = 'block';
-          } else {
-            panel.style.display = 'none';
-          }
-        });
-      }
-    </script>
-    <script>
-      $(document).ready(function() {
-        // Filter panels based on search input and dropdown selection
-        $('#searchInput').on('input', function() {
-          var searchValue = $(this).val().toLowerCase();
-          var filterValue = $('#taxaDropdown').val(); // Get selected filter value
-    
-          $('.panel').each(function() {
-            var panelText = $(this).text().toLowerCase();
-            var showPanel = true;
-    
-            // Check if panel matches search input
-            if (panelText.indexOf(searchValue) === -1) {
-              showPanel = false;
-            }
-    
-            // Check if panel matches dropdown filter
-            if (filterValue.length > 0) {
-              var panelTaxa = panelText.indexOf('taxă') !== -1;
-              var panelBuget = panelText.indexOf('buget') !== -1;
-              var panelGeneral = panelText.indexOf('general') !== -1;
-    
-              if (
-                (panelTaxa && !filterValue.includes('Taxă')) ||
-                (panelBuget && !filterValue.includes('Buget')) ||
-                (panelGeneral && !filterValue.includes('General'))
-              ) {
-                showPanel = false;
-              }
-            }
-    
-            // Show/hide panel based on search and filter
-            if (showPanel) {
-              $(this).show();
-            } else {
-              $(this).hide();
-            }
-          });
-        });
-    
-        // Function to handle dropdown selection change
-        $('#taxaDropdown').on('change', function() {
-          $('#searchInput').trigger('input'); // Trigger search input change to update results
-        });
-      });
-    </script>
 
     {% elif usertype == 'student' or usertype == 'alumni'%}     
     <div class="search-panel">
@@ -263,7 +186,9 @@
           <p><b>Oportunități de job-uri sau programe de voluntariat pentru absolvenți: </b>{{ ready_list_facs_prof_cons[i][8] }}</p>
         </div>
       </div>
+      {% if usertype == 'student'%}    
       <button class="add-button" data-index="{{ loop.index0 }}" onclick="addToFavorites(event)">Adaugă la Favorite</button>
+      {% endif %}
     </div>
     {% endfor %}
     {% endif %}
@@ -313,6 +238,84 @@
           $(this).hide();
         }
       });
+    });
+  });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+  .dropdown-content {
+    display: none;
+  }
+  
+  .dropdown-content.show {
+    display: block;
+  }
+</style>
+
+<script>
+  function toggleDropdown() {
+    const dropdownContent = document.getElementById('taxaDropdownContent');
+    dropdownContent.classList.toggle('show');
+  }
+
+  function searchList3() {
+    const selectedOption = document.getElementById('taxaDropdown').value;
+
+    const panels = document.querySelectorAll('.panel');
+    panels.forEach((panel) => {
+      const taxa = panel.dataset.taxa;
+      if (selectedOption === '' || selectedOption.includes(taxa)) {
+        panel.style.display = 'block';
+      } else {
+        panel.style.display = 'none';
+      }
+    });
+  }
+</script>
+<script>
+  $(document).ready(function() {
+    // Filter panels based on search input and dropdown selection
+    $('#searchInput').on('input', function() {
+      var searchValue = $(this).val().toLowerCase();
+      var filterValue = $('#taxaDropdown').val(); // Get selected filter value
+
+      $('.panel').each(function() {
+        var panelText = $(this).text().toLowerCase();
+        var showPanel = true;
+
+        // Check if panel matches search input
+        if (panelText.indexOf(searchValue) === -1) {
+          showPanel = false;
+        }
+
+        // Check if panel matches dropdown filter
+        if (filterValue.length > 0) {
+          var panelTaxa = panelText.indexOf('taxă') !== -1;
+          var panelBuget = panelText.indexOf('buget') !== -1;
+          var panelGeneral = panelText.indexOf('general') !== -1;
+
+          if (
+            (panelTaxa && !filterValue.includes('Taxă')) ||
+            (panelBuget && !filterValue.includes('Buget')) ||
+            (panelGeneral && !filterValue.includes('General'))
+          ) {
+            showPanel = false;
+          }
+        }
+
+        // Show/hide panel based on search and filter
+        if (showPanel) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+    });
+
+    // Function to handle dropdown selection change
+    $('#taxaDropdown').on('change', function() {
+      $('#searchInput').trigger('input'); // Trigger search input change to update results
     });
   });
 </script>

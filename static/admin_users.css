@@ -1,5 +1,5 @@
 body {
-    background-image: url('/static/blue-image.jpg');
+    background-image: url('/static/admin_wall.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
@@ -142,6 +142,19 @@ body {
       color: blue;
     }
     
+
+    .delete-button {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+  }
+
+  .delete-button:hover {
+      background-color: darkred;
+  }
     
     
     

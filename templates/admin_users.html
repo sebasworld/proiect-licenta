@@ -74,29 +74,34 @@
 
     <div style="position:relative;margin:20px">
       <div class="search-panel">
-        <input type="text" id="searchInput" placeholder="Căutați un utilizator...">
+          <input type="text" id="searchInput" placeholder="Căutați un utilizator...">
       </div>
       {% if date_user %}
-        {% for user in ready_list_users %}
-        <div class="panel">
+      {% for user in ready_list_users %}
+      <div class="panel">
           <div class="panel-content">
-            <div class="column">
-              <p><b>ID Utilizator: </b>{{ user[2] }}</p>
-              <p><b>Nume utilizator: </b>{{ user[0] }}</p>
-              <p><b>Tip utilizator: </b>{{ user[1] }}</p>
-            </div>
+              <div class="column">
+                  <p><b>ID Utilizator: </b>{{ user[2] }}</p>
+                  <p><b>Nume utilizator: </b>{{ user[0] }}</p>
+                  <p><b>Tip utilizator: </b>{{ user[1] }}</p>
+                  <form action="/delete_user" method="post">
+                      <input type="hidden" name="user_id" value="{{ user[2] }}">
+                      <button class="delete-button" type="submit">Șterge Utilizator</button>
+                  </form>
+              </div>
           </div>
-        </div>
-        {% endfor %}
-        {% if pagination %}
-        <div class="pagination-container">
+      </div>
+      {% endfor %}
+      {% if pagination %}
+      <div class="pagination-container">
           <div class="pagination">
-            {{ pagination.links }}
+              {{ pagination.links }}
           </div>
-        </div>
-        {% endif %}
+      </div>
       {% endif %}
-    </div>
+      {% endif %}
+  </div>
+  
     
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>

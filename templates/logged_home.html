@@ -1,57 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-  <link
-  rel="stylesheet"
-  href="/static/logged_home.css"
-  />
-  <link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css"
-  integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp"
-  crossorigin="anonymous"
-  />
-  <script 
-  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" 
-  crossorigin="anonymous">
-  </script>
-  <style>
-    a:link {
-      color: green;
-      background-color: transparent;
-      text-decoration: none;
-    }
-    
-    a:visited {
-      color: pink;
-      background-color: transparent;
-      text-decoration: none;
-    }
-    
-    a:hover {
-      color: red;
-      background-color: transparent;
-      text-decoration: underline;
-    }
-    
-    a:active {
-      color: yellow;
-      background-color: transparent;
-      text-decoration: underline;
-    }
+<head>
+    <link rel="stylesheet" href="/static/logged_home.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+    <style>
+        a:link {
+            color: green;
+            background-color: transparent;
+            text-decoration: none;
+        }
+        
+        a:visited {
+            color: pink;
+            background-color: transparent;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            color: red;
+            background-color: transparent;
+            text-decoration: underline;
+        }
+        
+        a:active {
+            color: yellow;
+            background-color: transparent;
+            text-decoration: underline;
+        }
+        
+        .contact-section {
+            text-align: center;
+            margin-top: 300px;
+            margin-bottom: 150px;
+        }
+        
+        .big-text {
+            text-align: center;
+            font-size: 48px;
+            font-weight: bold;
+            margin-top: 200px;
+            margin-bottom: 100px;
+        }
     </style>
-<head>  
     <title>Acasă</title>
 </head>
-
 <body>
     <div class="topnav">
-      <a class="active" href="{{url_for('logged_home')}}">Acasă</a>
-      <a href="{{url_for('univs')}}">Toate facultățile</a>
-      <a href="{{url_for('favs')}}">Favorite</a>
-      <a class="right" href="{{url_for('logout')}}">Delogare ({{ username }})</a>
+        <a class="active" href="{{url_for('logged_home')}}">Acasă</a>
+        <a href="{{url_for('univs')}}">Toate facultățile</a>
+        <a href="{{url_for('favs')}}">Favorite</a>
+        <a class="right" href="{{url_for('logout')}}">Delogare ({{ username }})</a>
+    </div>
+
+    <div class="big-text">
+      <p>Mulțumim că ați accesat WUni!</p>
+  </div>
+
+    <div class="contact-section">
+        <p>Contact: Banu Ionut-Sebastian<br>ionut.banu0211@stud.acs.upb.ro</p>
     </div>
 </body>
-
-
 </html>
