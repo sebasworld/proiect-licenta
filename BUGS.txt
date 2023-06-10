@@ -1,0 +1,3 @@
+	
+ - cand adaug la favorite ca elev, imi strica ultimul item , link-ul facultatii
+ - cand dau pe acasa ca alumni, inca apare Favorite

@@ -7,3 +7,5 @@
 
 - poate de facut security ca sa nu mi dea eroare cand incerc sa accesez din bara fara sa ma loghez, sa-mi dea un mesaj
 - paginare pt facultati - la toate si la favorite
+
+
