@@ -13,8 +13,6 @@ select * from Users;
 insert into Users(username,tip,passwd)
 VALUES('username', 'tip', 'passwd');
 
-delete from Users where username='sebi123'
-
 drop table Users;
 
 
@@ -43,9 +41,7 @@ create table Facs(
 
 ALTER TABLE Facs
 ADD COLUMN facimg bytea;
-
 drop table Facs;
-
 select * from Facs;
 
 
