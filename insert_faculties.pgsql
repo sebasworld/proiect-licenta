@@ -5043,7 +5043,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Matematică şi Informatică',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Buget', 
@@ -5080,7 +5080,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Matematică şi Informatică',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Taxă', 
@@ -5119,7 +5119,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Fizică',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'General', 
@@ -5157,7 +5157,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Chimie şi Inginerie Chimică',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'General', 
@@ -5195,7 +5195,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Biologie şi Geologie',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'General', 
@@ -5233,7 +5233,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Geografie',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'General', 
@@ -5271,7 +5271,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Ştiinţa şi Ingineria Mediului',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Buget', 
@@ -5308,7 +5308,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Ştiinţa şi Ingineria Mediului',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Taxă', 
@@ -5347,7 +5347,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Drept',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'4', 
 	'Buget', 
@@ -5384,7 +5384,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Drept',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'4', 
 	'Taxă', 
@@ -5423,7 +5423,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Litere',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Buget', 
@@ -5460,7 +5460,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Litere',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Taxă', 
@@ -5498,7 +5498,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Istorie şi Filosofie',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Buget', 
@@ -5535,7 +5535,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Istorie şi Filosofie',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Taxă', 
@@ -5572,7 +5572,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Sociologie şi Asistenţă Socială',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Buget', 
@@ -5608,7 +5608,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Sociologie şi Asistenţă Socială',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Taxă', 
@@ -5647,7 +5647,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Psihologie şi Ştiinţe ale Educaţiei',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Buget', 
@@ -5685,7 +5685,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Psihologie şi Ştiinţe ale Educaţiei',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Taxă', 
@@ -5724,7 +5724,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Ştiinţe Economice şi Gestiunea Afacerilor',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Buget', 
@@ -5760,7 +5760,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Ştiinţe Economice şi Gestiunea Afacerilor',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Taxă', 
@@ -5798,7 +5798,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Studii Europene',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Buget', 
@@ -5834,7 +5834,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Studii Europene',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Taxă', 
@@ -5872,7 +5872,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Business',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Buget', 
@@ -5909,7 +5909,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Business',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Taxă', 
@@ -5946,7 +5946,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Ştiinţe Politice, Administrative şi ale Comunicării',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Buget', 
@@ -5983,7 +5983,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Ştiinţe Politice, Administrative şi ale Comunicării',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Taxă', 
@@ -6020,7 +6020,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Educaţie Fizică şi Sport',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'General', 
@@ -6058,7 +6058,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Teatru şi FILM',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Buget', 
@@ -6096,7 +6096,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Teatru şi FILM',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'Taxă', 
@@ -6134,7 +6134,7 @@ insert into Facs(
 VALUES(
  	'Facultatea de Inginerie',
   	'Universitatea Babeș-Bolyai',
-	'Cluj',
+	'Cluj-Napoca',
 	'4.6',
 	'3', 
 	'General', 
