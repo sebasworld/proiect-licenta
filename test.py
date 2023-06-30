@@ -67,10 +67,8 @@ def add_fac():
         format1 = request.form['format']
         link_fac = request.form['linkfac']
         alumni_jobs = request.form['alumnijobs']
-
         conn = psycopg2.connect("postgresql://postgres:postgres@localhost:5432/licenta")
         cursor = conn.cursor()
-        
         image_file = request.files['facultyPhoto']
         img_data = image_file.read()
 
@@ -195,7 +193,6 @@ def admin_users():
             list_users= json.loads(date_json)
             ready_list_users = [(x[0], x[1], x[2]) for x in list_users]
 
-            # Paginate the user list
             page = request.args.get(get_page_parameter(), type=int, default=1)
             per_page = 7
             start = (page - 1) * per_page
@@ -416,25 +413,19 @@ from flask import request, jsonify, session
 
 @app.route('/add_to_favorites', methods=['POST'])
 def add_to_favorites():
-    # Get the index from the request JSON data
     index = int(request.json.get('index'))
 
-    # Check if the index is valid
     if index is None:
         return jsonify(message='Invalid index.'), 400
 
-    # Get the selected panel data from the "univs" page
     selected_panel = session['ready_list_facs_prof_cons'][index]
 
-    # Get the user type and user ID from the session
     user_type = session.get('tip')
     user_id = session.get('userid')
 
-    # Check if user type and user ID are present in the session
     if not user_type or not user_id:
         return jsonify(message='User not authenticated.'), 401
 
-    # Check the user type and update the session accordingly
     if user_type == 'student':
         session.setdefault('student', {}).setdefault(user_id, []).append(selected_panel)
         flash("Facultatea a fost adăugată cu succes la Favorite!", category='success')
@@ -450,16 +441,12 @@ def add_to_favorites():
 def remove_panel():
     user_type = request.form.get('userType')
     index_str = request.form.get('index')
-
     if user_type is None or index_str is None:
         return 'Invalid request data.'
-
     try:
         index = int(index_str)
     except (ValueError, TypeError):
         return 'Invalid index value.'
-
-    # Remove the panel data from the session based on the user type and index
     if user_type == 'elev' and session.get('elev'):
         elev_data = session['elev'].get(session['userid'])
         if elev_data and 0 <= index < len(elev_data):
@@ -476,7 +463,6 @@ def remove_panel():
             return 'User data not found in session.'
     else:
         return 'Invalid user type.'
-
     return redirect(url_for('favs'))
  
 
@@ -612,7 +598,7 @@ def login():
         else:
             #flash('V-ați logat cu succes!', category='success')
             crsr2 = conn.cursor()
-            crsr2.execute("select tip,userid,random_string from Users where username=%(username)s and passwd=%(passwd)s", {'username': username, 'passwd': password})
+            crsr2.execute("select tip,userid from Users where username=%(username)s and passwd=%(passwd)s", {'username': username, 'passwd': password})
             data = crsr2.fetchall()
             if data:
                 tip = str(data[0][0])
